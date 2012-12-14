@@ -53,8 +53,8 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	private void tick() {
-		Input.INSTANCE.tick();
-		for(int i : Input.INSTANCE.getKeysDown()) {
+		Input.tick();
+		for(int i : Input.getKeysDown()) {
 			System.out.print(KeyEvent.getKeyText(i));
 		}
 	}

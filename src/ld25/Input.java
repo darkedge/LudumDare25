@@ -12,50 +12,43 @@ public enum Input implements KeyListener, MouseListener, MouseMotionListener{
     INSTANCE;
     private static final int RANGE = 256;
     
-    private HashSet<Integer> pressed;
-    private HashSet<Integer> released;
-    private HashSet<Integer> held;
-    private HashSet<Integer> newreleased;
+    private HashSet<Integer> pressed = new HashSet<Integer>(RANGE);
+    private HashSet<Integer> released = new HashSet<Integer>(RANGE);
+    private HashSet<Integer> held = new HashSet<Integer>(RANGE);
+    private HashSet<Integer> newreleased = new HashSet<Integer>(RANGE);
     
-    private Input() {
-    	pressed 	= new HashSet<Integer>(RANGE);
-    	released	= new HashSet<Integer>(RANGE);
-    	held 		= new HashSet<Integer>(RANGE);
-    	newreleased = new HashSet<Integer>(RANGE);
-    }
-    
-    public void tick() {
-    	pressed.removeAll(held);
-    	held.addAll(pressed);
-    	held.removeAll(released);
+    public static void tick() {
+    	INSTANCE.pressed.removeAll(INSTANCE.held);
+    	INSTANCE.held.addAll(INSTANCE.pressed);
+    	INSTANCE.held.removeAll(INSTANCE.released);
     	
-    	released.clear();
-    	released.addAll(newreleased);
-    	newreleased.clear();
+    	INSTANCE.released.clear();
+    	INSTANCE.released.addAll(INSTANCE.newreleased);
+    	INSTANCE.newreleased.clear();
     }
     
-    public boolean getKey(int key) {
-    	return held.contains(key);
+    public static boolean getKey(int key) {
+    	return INSTANCE.held.contains(key);
     }
     
-    public boolean getKeyDown(int key) {
-    	return pressed.contains(key);
+    public static boolean getKeyDown(int key) {
+    	return INSTANCE.pressed.contains(key);
     }
     
-    public boolean getKeyUp(int key) {
-    	return released.contains(key);
+    public static boolean getKeyUp(int key) {
+    	return INSTANCE.released.contains(key);
     }
     
-    public Collection<Integer> getKeys() {
-    	return held;
+    public static Collection<Integer> getKeys() {
+    	return INSTANCE.held;
     }
     
-    public Collection<Integer> getKeysDown() {
-    	return pressed;
+    public static Collection<Integer> getKeysDown() {
+    	return INSTANCE.pressed;
     }
     
-    public Collection<Integer> getKeysUp() {
-    	return released;
+    public static Collection<Integer> getKeysUp() {
+    	return INSTANCE.released;
     }
     
     
