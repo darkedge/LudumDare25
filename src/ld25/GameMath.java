@@ -10,6 +10,10 @@ public class GameMath {
 		return a < min ? min : a > max ? max : a;
 	}
 	
+	static long clamp(long a, long min, long max) {
+		return a < min ? min : a > max ? max : a;
+	}
+	
 	static float max(float... a) {
 		float max = a[0];
 		for(float b : a) {
