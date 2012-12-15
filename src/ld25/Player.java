@@ -1,7 +1,5 @@
 package ld25;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -42,9 +40,6 @@ public class Player extends GameObject {
 	
 	public void render(Camera camera, double interpolation) {
 		camera.drawImage(currentSprite, x, y);
-		Graphics2D g = camera.getGraphics();
-		g.setColor(Color.white);
-		g.drawString(String.valueOf(x) + " " + String.valueOf(y), 10, 10);
 	}
 	
 	public float getX() {
