@@ -8,11 +8,14 @@ import javax.imageio.ImageIO;
 import ld25.Input.Button;
 
 public class Player {
+	private World world;
 	private int x;
 	private int y;
 	private BufferedImage image;
+	private static final int SPEED = 4;
 	
-	public Player(int x, int y) {
+	public Player(World world, int x, int y) {
+		this.world = world;
 		this.x = x;
 		this.y = y;
 		try {
@@ -25,17 +28,20 @@ public class Player {
 	
 	public void tick() {
 		if(Input.getButton(Button.LEFT)) {
-			x--;
+			x-= SPEED;
 		}
 		if(Input.getButton(Button.RIGHT)) {
-			x++;
+			x+= SPEED;
 		}
 		if(Input.getButton(Button.UP)) {
-			y--;
+			y-= SPEED;
 		}
 		if(Input.getButton(Button.DOWN)) {
-			y++;
+			y+= SPEED;
 		}
+		
+		x = GameMath.clamp(x, 0, world.getPixelWidth() - getWidth());
+		y = GameMath.clamp(y, 0, world.getPixelHeight() - getHeight());
 	}
 	
 	public void render(Camera camera, double interpolation) {

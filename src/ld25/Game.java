@@ -12,7 +12,7 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	// Constants
-	private static final String TITLE = "Chupa Macabre";
+	private static final String TITLE = "Goat Sucker";
 	private static final int WIDTH = 640;
 	private static final int HEIGHT = 480;
 	public static final int TICK_RATE = 60;
@@ -23,7 +23,6 @@ public class Game extends Canvas implements Runnable {
 	private long fpsTimer = 0;
 	
 	// Game objects
-	private Camera camera;
 	private IngameScreen screen;
 	
 	public Game() {
@@ -35,7 +34,6 @@ public class Game extends Canvas implements Runnable {
 		
 		setFocusable(true);
 		setScreen(new IngameScreen(this));
-		camera = new Camera(0,0, WIDTH, HEIGHT);
 	}
 	
 	public void setScreen(IngameScreen screen) {
@@ -98,8 +96,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getWidth(), getHeight());
-		camera.setGraphics(g);
-		screen.render(camera, interpolation);
+		screen.render(g, interpolation);
 		g.dispose();
 		bs.show();
 	}

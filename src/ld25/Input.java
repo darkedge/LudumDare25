@@ -37,9 +37,12 @@ public enum Input implements KeyListener, MouseListener, MouseMotionListener{
 		MAP.put(KeyEvent.VK_RIGHT, Button.RIGHT);
 		MAP.put(KeyEvent.VK_UP, Button.UP);
 		MAP.put(KeyEvent.VK_DOWN, Button.DOWN);
+    	MAP.put(KeyEvent.VK_A, Button.LEFT);
+		MAP.put(KeyEvent.VK_D, Button.RIGHT);
+		MAP.put(KeyEvent.VK_W, Button.UP);
+		MAP.put(KeyEvent.VK_S, Button.DOWN);
 		MAP.put(KeyEvent.VK_SPACE, Button.FIRE);
 		MAP.put(KeyEvent.VK_CONTROL, Button.FIRE);
-		MAP.put(KeyEvent.VK_SPACE, Button.FIRE);
 		MAP.put(KeyEvent.VK_Z, Button.FIRE);
 		MAP.put(KeyEvent.VK_X, Button.FIRE);
 		MAP.put(KeyEvent.VK_ENTER, Button.ACCEPT);
