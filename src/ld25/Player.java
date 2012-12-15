@@ -1,5 +1,7 @@
 package ld25;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -8,32 +10,23 @@ import javax.imageio.ImageIO;
 import ld25.Input.Button;
 
 public class Player extends GameObject {
-	private final World world;
-	private float x;
-	private float y;
-	private int xx;
-	private int yy;
 	private SpriteSheet left;
 	private SpriteSheet right;
 	private SpriteSheet currentAnimation;
 	private Looper animation;
-	private static final float SPEED = 0.1f;
+	private static final float SPEED = 1.5f;
 	private Movement movement = Movement.STILL;
 	
 	enum Movement {
 		STILL, LEFT, RIGHT, UP, DOWN;
 	}
 	
-	public Player(World world, int x, int y) {
-		this.world = world;
-		this.xx = x;
-		this.yy = y;
-		x = xx * world.getTileSize();
-		y = yy * world.getTileSize();
+	public Player(World world, int mapx, int mapy) {
+		super(world, mapx, mapy);
 		try {
-			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/goat.png"));
+			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/dogleft.png"));
 			left = new SpriteSheet(image, image.getHeight());
-			image = ImageIO.read(World.class.getResourceAsStream("/goat.png"));
+			image = ImageIO.read(World.class.getResourceAsStream("/dogright.png"));
 			right = new SpriteSheet(image, image.getHeight());
 			currentAnimation = right;
 		} catch (IOException e) {
@@ -44,41 +37,93 @@ public class Player extends GameObject {
 	
 	public void tick() {
 		if(movement == Movement.STILL) {
-			if(Input.getButtonDown(Button.LEFT)) {
-				if(world.isClear(xx - 1, yy)) movement = Movement.LEFT;
-			} else if(Input.getButtonDown(Button.RIGHT)) {
-				if(world.isClear(xx + 1, yy)) movement = Movement.RIGHT;
-			} else if(Input.getButtonDown(Button.UP)) {
-				if(world.isClear(xx, yy - 1)) movement = Movement.UP;
-			} else if(Input.getButtonDown(Button.DOWN)) {
-				if(world.isClear(xx, yy + 1)) movement = Movement.DOWN;
+			if(Input.getButton(Button.LEFT)) {
+				if(world.isClear(mapx - 1, mapy)) {
+					targetX = mapx - 1;
+					world.move(this);
+					movement = Movement.LEFT;
+					currentAnimation = left;
+				}
+			} else if(Input.getButton(Button.RIGHT)) {
+				if(world.isClear(mapx + 1, mapy)) {
+					targetX = mapx + 1;
+					world.move(this);
+					movement = Movement.RIGHT;
+					currentAnimation = right;
+				}
+			} else if(Input.getButton(Button.UP)) {
+				if(world.isClear(mapx, mapy - 1)) {
+					targetY = mapy - 1;
+					world.move(this);
+					movement = Movement.UP;
+				}
+			} else if(Input.getButton(Button.DOWN)) {
+				if(world.isClear(mapx, mapy + 1)) {
+					targetY = mapy + 1;
+					world.move(this);
+					movement = Movement.DOWN;
+				}
 			}
 		}
 		
 		// Movement tweening
 		switch (movement) {
 			case DOWN:
-				y += SPEED
+				y += SPEED;
+				if((int) Math.floor(y) / world.getTileSize() == targetY) {
+					y = (int) Math.floor(y);
+					mapy = targetY;
+					movement = Movement.STILL;
+				}
 				break;
 			case LEFT:
+				x -= SPEED;
+				if(Math.floor(x) / world.getTileSize() < targetX) {
+					x = (int) Math.floor(x);
+					mapx = targetX;
+					movement = Movement.STILL;
+				}
 				break;
 			case RIGHT:
+				x += SPEED;
+				if((int) Math.floor(x) / world.getTileSize() == targetX) {
+					x = (int) Math.floor(x);
+					mapx = targetX;
+					movement = Movement.STILL;
+				}
 				break;
 			case UP:
+				y -= SPEED;
+				if(Math.floor(y) / world.getTileSize() < targetY) {
+					y = (int) Math.floor(y);
+					mapy = targetY;
+					movement = Movement.STILL;
+				}
 				break;
 		}
 	}
 	
 	public void render(Camera camera, double interpolation) {
 		camera.drawImage(currentAnimation.getImage(animation.getValue()), x, y);
+		Graphics2D g = camera.getGraphics();
+		g.setColor(Color.white);
+		g.drawString(String.valueOf(mapx) + " " + String.valueOf(mapy), 10, 10);
 	}
 	
-	public int getX() {
+	public float getX() {
 		return x;
 	}
 	
-	public int getY() {
+	public float getY() {
 		return y;
+	}
+	
+	public int getMapX() {
+		return mapx;
+	}
+	
+	public int getMapY() {
+		return mapy;
 	}
 	
 	public int getWidth() {
