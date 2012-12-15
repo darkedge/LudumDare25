@@ -10,10 +10,9 @@ import javax.imageio.ImageIO;
 import ld25.Input.Button;
 
 public class Player extends GameObject {
-	private SpriteSheet left;
-	private SpriteSheet right;
-	private SpriteSheet currentAnimation;
-	private Looper animation;
+	private BufferedImage left;
+	private BufferedImage right;
+	private BufferedImage currentSprite;
 	private static final float SPEED = 1.5f;
 	private Movement movement = Movement.STILL;
 	
@@ -24,15 +23,12 @@ public class Player extends GameObject {
 	public Player(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
 		try {
-			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/dogleft.png"));
-			left = new SpriteSheet(image, image.getHeight());
-			image = ImageIO.read(World.class.getResourceAsStream("/dogright.png"));
-			right = new SpriteSheet(image, image.getHeight());
-			currentAnimation = right;
+			left = ImageIO.read(World.class.getResourceAsStream("/dogleft.png"));
+			right = ImageIO.read(World.class.getResourceAsStream("/dogright.png"));
+			currentSprite = right;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		animation = new Looper(0.0f, 1.0f, 1);
 	}
 	
 	public void tick() {
@@ -42,14 +38,14 @@ public class Player extends GameObject {
 					targetX = mapx - 1;
 					world.move(this);
 					movement = Movement.LEFT;
-					currentAnimation = left;
+					currentSprite = left;
 				}
 			} else if(Input.getButton(Button.RIGHT)) {
 				if(world.isClear(mapx + 1, mapy)) {
 					targetX = mapx + 1;
 					world.move(this);
 					movement = Movement.RIGHT;
-					currentAnimation = right;
+					currentSprite = right;
 				}
 			} else if(Input.getButton(Button.UP)) {
 				if(world.isClear(mapx, mapy - 1)) {
@@ -104,7 +100,7 @@ public class Player extends GameObject {
 	}
 	
 	public void render(Camera camera, double interpolation) {
-		camera.drawImage(currentAnimation.getImage(animation.getValue()), x, y);
+		camera.drawImage(currentSprite, x, y);
 		Graphics2D g = camera.getGraphics();
 		g.setColor(Color.white);
 		g.drawString(String.valueOf(mapx) + " " + String.valueOf(mapy), 10, 10);
@@ -127,10 +123,10 @@ public class Player extends GameObject {
 	}
 	
 	public int getWidth() {
-		return currentAnimation.getSpriteWidth();
+		return currentSprite.getWidth();
 	}
 	
 	public int getHeight() {
-		return currentAnimation.getSpriteHeight();
+		return currentSprite.getHeight();
 	}
 }
