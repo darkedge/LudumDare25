@@ -7,24 +7,33 @@ import javax.imageio.ImageIO;
 
 import ld25.Input.Button;
 
-public class Player {
-	private World world;
-	private int x;
-	private int y;
+public class Player extends GameObject {
+	private final World world;
+	private float x;
+	private float y;
+	private int xx;
+	private int yy;
 	private SpriteSheet left;
 	private SpriteSheet right;
 	private SpriteSheet currentAnimation;
 	private Looper animation;
-	private static final int SPEED = 4;
+	private static final float SPEED = 0.1f;
+	private Movement movement = Movement.STILL;
+	
+	enum Movement {
+		STILL, LEFT, RIGHT, UP, DOWN;
+	}
 	
 	public Player(World world, int x, int y) {
 		this.world = world;
-		this.x = x;
-		this.y = y;
+		this.xx = x;
+		this.yy = y;
+		x = xx * world.getTileSize();
+		y = yy * world.getTileSize();
 		try {
-			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/dog.png"));
+			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/goat.png"));
 			left = new SpriteSheet(image, image.getHeight());
-			image = ImageIO.read(World.class.getResourceAsStream("/dog.png"));
+			image = ImageIO.read(World.class.getResourceAsStream("/goat.png"));
 			right = new SpriteSheet(image, image.getHeight());
 			currentAnimation = right;
 		} catch (IOException e) {
@@ -34,43 +43,30 @@ public class Player {
 	}
 	
 	public void tick() {
-		/*
-		if(Input.getButton(Button.LEFT)) {
-			x-= SPEED;
-			currentAnimation = left;
-		}
-		if(Input.getButton(Button.RIGHT)) {
-			x+= SPEED;
-			currentAnimation = right;
-		}
-		if(Input.getButton(Button.UP)) {
-			y-= SPEED;
-		}
-		if(Input.getButton(Button.DOWN)) {
-			y+= SPEED;
-		}
-		if(Input.getButton(Button.LEFT) ||
-				Input.getButton(Button.RIGHT) ||
-				Input.getButton(Button.DOWN) ||
-				Input.getButton(Button.UP)) {
-			animation.tick(1.0f / (Game.TICK_RATE / 4));
-		}
-		*/
-		if(Input.getButtonDown(Button.LEFT)) {
-			x -= world.getTileSize();
-		}
-		if(Input.getButtonDown(Button.RIGHT)) {
-			x += world.getTileSize();
-		}
-		if(Input.getButtonDown(Button.UP)) {
-			y -= world.getTileSize();
-		}
-		if(Input.getButtonDown(Button.DOWN)) {
-			y += world.getTileSize();
+		if(movement == Movement.STILL) {
+			if(Input.getButtonDown(Button.LEFT)) {
+				if(world.isClear(xx - 1, yy)) movement = Movement.LEFT;
+			} else if(Input.getButtonDown(Button.RIGHT)) {
+				if(world.isClear(xx + 1, yy)) movement = Movement.RIGHT;
+			} else if(Input.getButtonDown(Button.UP)) {
+				if(world.isClear(xx, yy - 1)) movement = Movement.UP;
+			} else if(Input.getButtonDown(Button.DOWN)) {
+				if(world.isClear(xx, yy + 1)) movement = Movement.DOWN;
+			}
 		}
 		
-		x = GameMath.clamp(x, 0, world.getPixelWidth() - getWidth());
-		y = GameMath.clamp(y, 0, world.getPixelHeight() - getHeight());
+		// Movement tweening
+		switch (movement) {
+			case DOWN:
+				y += SPEED
+				break;
+			case LEFT:
+				break;
+			case RIGHT:
+				break;
+			case UP:
+				break;
+		}
 	}
 	
 	public void render(Camera camera, double interpolation) {

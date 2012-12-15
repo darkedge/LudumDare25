@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.imageio.ImageIO;
 
@@ -17,6 +19,7 @@ public class World {
 	private static final int WIDTH = 96;
 	private static final int HEIGHT = 96;
 	private int[] tiles;
+	private GameObject[] map;
 	private SpriteSheet sheet;
 	private static final int TILE_SIZE = 16;
 	private Player player;
@@ -31,6 +34,8 @@ public class World {
 	private int firstY;
 	private int lastX;
 	private int lastY;
+	
+	private Collection<GameObject> entities = new HashSet<GameObject>();
 
 	public World(Game game) {
 		try {
