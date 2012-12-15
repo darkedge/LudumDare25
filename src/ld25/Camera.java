@@ -28,4 +28,20 @@ public class Camera {
 	public void setGraphics(Graphics2D g) {
 		this.g = g;
 	}
+	
+	public int getX() {
+		return (int) Math.floor(rect.getX());
+	}
+	
+	public int getY() {
+		return (int) Math.floor(rect.getY());
+	}
+	
+	public int getHeight() {
+		return (int) Math.floor(rect.getHeight());
+	}
+	
+	public int getWidth() {
+		return (int) Math.floor(rect.getWidth());
+	}
 }

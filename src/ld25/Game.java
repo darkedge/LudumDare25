@@ -12,7 +12,7 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	// Constants
-	private static final String TITLE = "TODO: Set name!";
+	private static final String TITLE = "Chupa Macabre";
 	private static final int WIDTH = 640;
 	private static final int HEIGHT = 480;
 	private static final int TICK_RATE = 60;
@@ -24,7 +24,7 @@ public class Game extends Canvas implements Runnable {
 	
 	// Game objects
 	private Camera camera;
-	private Screen screen;
+	private IngameScreen screen;
 	
 	public Game() {
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -34,11 +34,11 @@ public class Game extends Canvas implements Runnable {
 		addMouseListener(Input.INSTANCE);
 		
 		setFocusable(true);
-		setScreen(new Screen(this));
+		setScreen(new IngameScreen(this));
 		camera = new Camera(0,0, WIDTH, HEIGHT);
 	}
 	
-	public void setScreen(Screen screen) {
+	public void setScreen(IngameScreen screen) {
 		this.screen = screen;
 	}
 	
