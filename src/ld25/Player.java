@@ -13,12 +13,6 @@ public class Player extends GameObject {
 	private BufferedImage left;
 	private BufferedImage right;
 	private BufferedImage currentSprite;
-	private static final float SPEED = 1.5f;
-	private Movement movement = Movement.STILL;
-	
-	enum Movement {
-		STILL, LEFT, RIGHT, UP, DOWN;
-	}
 	
 	public Player(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
@@ -32,78 +26,25 @@ public class Player extends GameObject {
 	}
 	
 	public void tick() {
-		if(movement == Movement.STILL) {
-			if(Input.getButton(Button.LEFT)) {
-				if(world.isClear(mapx - 1, mapy)) {
-					targetX = mapx - 1;
-					world.move(this);
-					movement = Movement.LEFT;
-					currentSprite = left;
-				}
-			} else if(Input.getButton(Button.RIGHT)) {
-				if(world.isClear(mapx + 1, mapy)) {
-					targetX = mapx + 1;
-					world.move(this);
-					movement = Movement.RIGHT;
-					currentSprite = right;
-				}
-			} else if(Input.getButton(Button.UP)) {
-				if(world.isClear(mapx, mapy - 1)) {
-					targetY = mapy - 1;
-					world.move(this);
-					movement = Movement.UP;
-				}
-			} else if(Input.getButton(Button.DOWN)) {
-				if(world.isClear(mapx, mapy + 1)) {
-					targetY = mapy + 1;
-					world.move(this);
-					movement = Movement.DOWN;
-				}
+		if(direction == Direction.STILL) {
+			if (Input.getButton(Button.LEFT)) {
+				if (tryMove(Direction.LEFT)) currentSprite = left;
 			}
+			else if (Input.getButton(Button.RIGHT)) {
+				if (tryMove(Direction.RIGHT)) currentSprite = right;
+			}
+			else if (Input.getButton(Button.UP)) tryMove(Direction.UP);
+			else if (Input.getButton(Button.DOWN)) tryMove(Direction.DOWN);
 		}
 		
-		// Movement tweening
-		switch (movement) {
-			case DOWN:
-				y += SPEED;
-				if((int) Math.floor(y) / world.getTileSize() == targetY) {
-					y = (int) Math.floor(y);
-					mapy = targetY;
-					movement = Movement.STILL;
-				}
-				break;
-			case LEFT:
-				x -= SPEED;
-				if(Math.floor(x) / world.getTileSize() < targetX) {
-					x = (int) Math.floor(x);
-					mapx = targetX;
-					movement = Movement.STILL;
-				}
-				break;
-			case RIGHT:
-				x += SPEED;
-				if((int) Math.floor(x) / world.getTileSize() == targetX) {
-					x = (int) Math.floor(x);
-					mapx = targetX;
-					movement = Movement.STILL;
-				}
-				break;
-			case UP:
-				y -= SPEED;
-				if(Math.floor(y) / world.getTileSize() < targetY) {
-					y = (int) Math.floor(y);
-					mapy = targetY;
-					movement = Movement.STILL;
-				}
-				break;
-		}
+		doMovement();
 	}
 	
 	public void render(Camera camera, double interpolation) {
 		camera.drawImage(currentSprite, x, y);
 		Graphics2D g = camera.getGraphics();
 		g.setColor(Color.white);
-		g.drawString(String.valueOf(mapx) + " " + String.valueOf(mapy), 10, 10);
+		g.drawString(String.valueOf(x) + " " + String.valueOf(y), 10, 10);
 	}
 	
 	public float getX() {

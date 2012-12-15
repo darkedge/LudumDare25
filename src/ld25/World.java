@@ -5,10 +5,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import sun.awt.HorizBagLayout;
+import ld25.GameObject.Direction;
 
 /**
  * Game model
@@ -48,8 +49,41 @@ public class World {
 
 		tiles = new int[WIDTH * HEIGHT];
 		Arrays.fill(tiles, 0);
-		player = new Player(this, 0, 0);
+		player = new Player(this, WIDTH / 2, HEIGHT / 2);
 		insert(player);
+		
+		int dangerZone = 16;
+		
+		// Random goats
+		Random r = Game.RANDOM;
+		for(int i = 0; i < 500; i++) {
+			int x, y;
+			if(r.nextBoolean()) { // Left or right
+				x = r.nextBoolean() ? r.nextInt(dangerZone) + WIDTH - dangerZone : r.nextInt(dangerZone);
+				y = r.nextInt(HEIGHT);
+			} else { // Up or down
+				x = r.nextInt(WIDTH);
+				y = r.nextBoolean() ? r.nextInt(dangerZone) + HEIGHT - dangerZone : r.nextInt(dangerZone);
+			}
+			if(isClear(x, y)) {
+				int type = r.nextInt(4);
+				switch(type) {
+					case 0:
+						insert(new Goat(this, x, y));
+						break;
+					case 1:
+						insert(new Gunner(this, x, y));
+						break;
+					case 2:
+						insert(new Bandit(this, x, y));
+						break;
+					case 3:
+						insert(new Sniper(this, x, y));
+						break;
+				}
+			}
+		}
+		
 		overlay = new Overlay();
 		camera = new Camera(0, 0, game.getHeight(), game.getHeight());
 		pixelWidth = WIDTH * TILE_SIZE;
@@ -133,12 +167,26 @@ public class World {
 		return pixelHeight;
 	}
 
-	public void move(GameObject object) {
+	public void move(GameObject object, Direction direction) {
 		int x = object.getMapX();
 		int y = object.getMapY();
-		int targetX = object.getTargetX();
-		int targetY = object.getTargetY();
 		map[y * WIDTH + x] = null;
-		map[targetX * WIDTH + targetY] = object;
+		switch(direction) {
+			case DOWN:
+				y++;
+				break;
+			case LEFT:
+				x--;
+				break;
+			case RIGHT:
+				x++;
+				break;
+			case UP:
+				y--;
+				break;
+		}
+		map[y * WIDTH + x] = object;
+		object.setMapX(x);
+		object.setMapY(y);
 	}
 }

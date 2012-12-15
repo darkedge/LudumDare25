@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
@@ -25,6 +26,7 @@ public class Game extends Canvas implements Runnable {
 	
 	// Game objects
 	private IngameScreen screen;
+	public static Random RANDOM = new Random();
 	
 	public Game() {
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
