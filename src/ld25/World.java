@@ -20,8 +20,7 @@ import ld25.GameObject.Direction;
 public class World {
 	private static final int WIDTH = 96;
 	private static final int HEIGHT = 96;
-	private int[] tiles;
-	private GameObject[] map = new GameObject[WIDTH * HEIGHT];
+	private Cell[] map = new Cell[WIDTH * HEIGHT];
 	private SpriteSheet sheet;
 	private static final int TILE_SIZE = 16;
 	private Player player;
@@ -38,6 +37,7 @@ public class World {
 	private int lastY;
 	
 	private HashSet<GameObject> gameObjects = new HashSet<GameObject>();
+	private HashSet<GameObject> disposed = new HashSet<GameObject>();
 
 	public World(Game game) {
 		try {
@@ -47,8 +47,10 @@ public class World {
 			e.printStackTrace();
 		}
 
-		tiles = new int[WIDTH * HEIGHT];
-		Arrays.fill(tiles, 0);
+		for(int i = 0; i < WIDTH * HEIGHT; i++) {
+			map[i] = new Cell();
+			map[i].tile = 0;
+		}
 		player = new Player(this, WIDTH / 2, HEIGHT / 2);
 		insert(player);
 		
@@ -94,13 +96,24 @@ public class World {
 		gameObjects.add(object);
 		int x = object.getMapX();
 		int y = object.getMapY();
-		map[y * WIDTH + x] = object;
+		map[y * WIDTH + x].gameObject = object;
 	}
 
 	public void tick() {
 		for(GameObject o : gameObjects) {
 			o.tick();
+			if(o.isDisposed()) {
+				disposed.add(o);
+			}
 		}
+		for(GameObject o : disposed) {
+			int x = o.getMapX();
+			int y = o.getMapY();
+			map[y * WIDTH + x].gameObject = null;
+		}
+		gameObjects.removeAll(disposed);
+		disposed.clear();
+		
 		
 		// Center around player
 		int px = Math.round(player.getX()) + player.getWidth() / 2 - camera.getWidth() / 2;
@@ -128,7 +141,7 @@ public class World {
 		
 		for (int x = firstX; x <= lastX; x++) {
 			for (int y = firstY; y <= lastY; y++) {
-				camera.drawImage(sheet.getImage(tiles[y * WIDTH + x]), x * TILE_SIZE, y * TILE_SIZE);
+				camera.drawImage(sheet.getImage(map[y * WIDTH + x].tile), x * TILE_SIZE, y * TILE_SIZE);
 			}
 		}
 
@@ -140,7 +153,7 @@ public class World {
 	}
 	
 	public boolean isClear(int x, int y) {
-		return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && map[y * WIDTH + x] == null;
+		return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && map[y * WIDTH + x].gameObject == null;
 	}
 
 	public Camera getCamera() {
@@ -170,7 +183,7 @@ public class World {
 	public void move(GameObject object, Direction direction) {
 		int x = object.getMapX();
 		int y = object.getMapY();
-		map[y * WIDTH + x] = null;
+		map[y * WIDTH + x].gameObject = null;
 		switch(direction) {
 			case DOWN:
 				y++;
@@ -185,7 +198,7 @@ public class World {
 				y--;
 				break;
 		}
-		map[y * WIDTH + x] = object;
+		map[y * WIDTH + x].gameObject = object;
 		object.setMapX(x);
 		object.setMapY(y);
 	}

@@ -3,6 +3,7 @@ package ld25;
 import java.awt.image.BufferedImage;
 
 public abstract class GameObject {
+	private boolean isDisposed = false;
 	protected final World world;
 	protected float x;
 	protected float y;
@@ -59,6 +60,10 @@ public abstract class GameObject {
 		return success;
 	}
 	
+	protected void dispose() {
+		isDisposed = true;
+	}
+	
 	public abstract void tick();
 	
 	public void doMovement() {
@@ -104,5 +109,9 @@ public abstract class GameObject {
 	
 	public void setMapY(int mapy) {
 		this.mapy = mapy;
+	}
+
+	public boolean isDisposed() {
+		return isDisposed;
 	}
 }
