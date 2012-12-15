@@ -1,9 +1,9 @@
 package ld25;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
+import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
@@ -18,10 +18,9 @@ public class Game extends Canvas implements Runnable {
 	private static final int TICK_RATE = 60;
 	
 	// Game loop variables
-	private long lastTime;
 	private boolean running = false;
-	private int fps;
-	private int fpsTimer;
+	private int fps = 0;
+	private long fpsTimer = 0;
 	
 	// Game objects
 	private Camera camera;
@@ -61,7 +60,8 @@ public class Game extends Canvas implements Runnable {
 		while (running) {
 			long now = System.nanoTime();
 			long delta = now - lastTime;
-			delta = GameMath.clamp(delta, 0, 100000000); // TODO: check this value
+			lastTime = now;
+			delta = GameMath.clamp(delta, 0, 1000000000); // TODO: check this value
 			accumulator += delta;
 			fpsTimer += delta;
 			
@@ -70,7 +70,7 @@ public class Game extends Canvas implements Runnable {
 				accumulator -= TICK_TIME;
 			}
 
-			render(accumulator);
+			render(accumulator / TICK_TIME);
 			fps++;
 			
 			if (fpsTimer > 1000000000) {
@@ -85,9 +85,7 @@ public class Game extends Canvas implements Runnable {
 	
 	private void tick() {
 		Input.tick();
-		for(int i : Input.getKeysDown()) {
-			System.out.print(KeyEvent.getKeyText(i));
-		}
+		screen.tick();
 	}
 	
 	private void render(double interpolation) {
@@ -97,8 +95,10 @@ public class Game extends Canvas implements Runnable {
 			return;
 		}
 		
-		Graphics g = bs.getDrawGraphics();
+		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
+		g.setColor(Color.black);
 		g.fillRect(0, 0, getWidth(), getHeight());
+		camera.setGraphics(g);
 		screen.render(camera, interpolation);
 		g.dispose();
 		bs.show();
