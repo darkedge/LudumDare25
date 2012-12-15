@@ -34,6 +34,7 @@ public class Player {
 	}
 	
 	public void tick() {
+		/*
 		if(Input.getButton(Button.LEFT)) {
 			x-= SPEED;
 			currentAnimation = left;
@@ -53,6 +54,19 @@ public class Player {
 				Input.getButton(Button.DOWN) ||
 				Input.getButton(Button.UP)) {
 			animation.tick(1.0f / (Game.TICK_RATE / 4));
+		}
+		*/
+		if(Input.getButtonDown(Button.LEFT)) {
+			x -= world.getTileSize();
+		}
+		if(Input.getButtonDown(Button.RIGHT)) {
+			x += world.getTileSize();
+		}
+		if(Input.getButtonDown(Button.UP)) {
+			y -= world.getTileSize();
+		}
+		if(Input.getButtonDown(Button.DOWN)) {
+			y += world.getTileSize();
 		}
 		
 		x = GameMath.clamp(x, 0, world.getPixelWidth() - getWidth());

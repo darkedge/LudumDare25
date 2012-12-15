@@ -18,11 +18,9 @@ public class Camera {
 	
 	public void drawImage(BufferedImage image, float x, float y) {
 		Rectangle2D rectt = new Rectangle2D.Float(x, y, image.getWidth(), image.getHeight());
-		if(rect.intersects(rectt)) {
-			x -= rect.getX();
-			y -= rect.getY();
-			g.drawImage(image, Math.round(x), Math.round(y), null);
-		}
+		x -= rect.getX();
+		y -= rect.getY();
+		g.drawImage(image, Math.round(x), Math.round(y), null);
 	}
 
 	public void setGraphics(Graphics2D g) {

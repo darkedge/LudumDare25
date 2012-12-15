@@ -13,7 +13,7 @@ public class IngameScreen {
 	public IngameScreen(Game game) {
 		this.game = game;
 		
-		world = new World();
+		world = new World(game);
 		hud = new Hud(world);
 	}
 	

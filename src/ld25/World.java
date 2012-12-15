@@ -18,7 +18,7 @@ public class World {
 	private static final int HEIGHT = 96;
 	private int[] tiles;
 	private SpriteSheet sheet;
-	private static final int TILE_SIZE = 48;
+	private static final int TILE_SIZE = 16;
 	private Player player;
 	private Overlay overlay;
 	private Camera camera;
@@ -32,7 +32,7 @@ public class World {
 	private int lastX;
 	private int lastY;
 
-	public World() {
+	public World(Game game) {
 		try {
 			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/test.png"));
 			sheet = new SpriteSheet(image, TILE_SIZE);
@@ -44,7 +44,7 @@ public class World {
 		Arrays.fill(tiles, 0);
 		player = new Player(this, 0, 0);
 		overlay = new Overlay();
-		camera = new Camera(0, 0, 480, 480);
+		camera = new Camera(0, 0, game.getHeight(), game.getHeight());
 		pixelWidth = WIDTH * TILE_SIZE;
 		pixelHeight = HEIGHT * TILE_SIZE;
 	}
