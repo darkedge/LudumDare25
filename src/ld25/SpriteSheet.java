@@ -28,7 +28,7 @@ public class SpriteSheet {
 	private void split() {
 		for(int i = 0; i < horTiles * verTiles; i++) {
 			int x = i % horTiles;
-			int y = i / verTiles;
+			int y = i / horTiles;
 			slices[i] = new BufferedImage(tw, th, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = slices[i].createGraphics();
 			g.drawImage(image, -x * tw, -y * th, null);
@@ -46,5 +46,13 @@ public class SpriteSheet {
 	
 	public BufferedImage getImage(int x, int y) {
 		return slices[y * horTiles + x];
+	}
+
+	public int getSpriteWidth() {
+		return tw;
+	}
+	
+	public int getSpriteHeight() {
+		return th;
 	}
 }

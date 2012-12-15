@@ -5,24 +5,9 @@ package ld25;
  * @author Marco Jonkers
  *
  */
-public class Flipper {
-	private float min;
-	private float max;
-	private float position;
-	private float var;
-	private boolean forward;
-	private int value;
-	
+public class Flipper extends Picker {	
 	public Flipper(float min, float max, float start, int steps, boolean forward) {
-		this.min = min;
-		this.max = max;
-		this.forward = forward;
-		position = start;
-		if(steps == 0) {
-			var = 0;
-		} else {
-			var = (steps - 1) / (max - min);
-		}
+		super(min, max, start, steps, forward);
 	}
 	
 	public Flipper(float min, float max, int steps) {
@@ -52,13 +37,5 @@ public class Flipper {
 			forward = !forward;
 		}
 		if(var != 0) value = Math.round((position - min) * var);
-	}
-	
-	public int getValue() {
-		return value;
-	}
-	
-	public float getPosition() {
-		return position;
 	}
 }

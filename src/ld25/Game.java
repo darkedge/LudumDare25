@@ -15,6 +15,7 @@ public class Game extends Canvas implements Runnable {
 	private static final String TITLE = "Goat Sucker";
 	private static final int WIDTH = 640;
 	private static final int HEIGHT = 480;
+	private static final int SCALE = 2;
 	public static final int TICK_RATE = 60;
 	
 	// Game loop variables
@@ -96,6 +97,7 @@ public class Game extends Canvas implements Runnable {
 		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getWidth(), getHeight());
+		g.scale(2, 2);
 		screen.render(g, interpolation);
 		g.dispose();
 		bs.show();
