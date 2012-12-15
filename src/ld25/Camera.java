@@ -17,10 +17,10 @@ public class Camera {
 	}
 	
 	public void drawImage(BufferedImage image, float x, float y) {
-		x -= rect.getX();
-		y -= rect.getY();
 		Rectangle2D rectt = new Rectangle2D.Float(x, y, image.getWidth(), image.getHeight());
 		if(rect.intersects(rectt)) {
+			x -= rect.getX();
+			y -= rect.getY();
 			g.drawImage(image, Math.round(x), Math.round(y), null);
 		}
 	}
@@ -43,5 +43,9 @@ public class Camera {
 	
 	public int getWidth() {
 		return (int) Math.floor(rect.getWidth());
+	}
+	
+	public Graphics2D getGraphics() {
+		return g;
 	}
 }

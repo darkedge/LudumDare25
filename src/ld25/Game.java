@@ -15,7 +15,7 @@ public class Game extends Canvas implements Runnable {
 	private static final String TITLE = "Chupa Macabre";
 	private static final int WIDTH = 640;
 	private static final int HEIGHT = 480;
-	private static final int TICK_RATE = 60;
+	public static final int TICK_RATE = 60;
 	
 	// Game loop variables
 	private boolean running = false;

@@ -18,6 +18,7 @@ public class World {
 	private SpriteSheet sheet;
 	private static final int TILE_SIZE = 16;
 	private Player player;
+	private Overlay overlay;
 	
 	public World() {
 		try {
@@ -30,10 +31,12 @@ public class World {
 		tiles = new int[WIDTH * HEIGHT];
 		Arrays.fill(tiles, 0);
 		player = new Player(0,0);
+		overlay = new Overlay();
 	}
 	
 	public void tick() {
 		player.tick();
+		overlay.tick();
 	}
 	
 	public void render(Camera camera, double interpolation) {
@@ -59,5 +62,6 @@ public class World {
 		}
 		
 		player.render(camera, interpolation);
+		overlay.render(camera, interpolation);
 	}
 }

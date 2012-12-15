@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 import ld25.Input.Button;
 
 public class IngameScreen {
+	/**
+	 * TODO: HUD, minimap
+	 */
 	private Game game;
 	private World world;
 	private BufferedImage image;
