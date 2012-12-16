@@ -211,6 +211,9 @@ public class World {
 			map[y * WIDTH + x].gameObject = null;
 		}
 		gameObjects.removeAll(disposed);
+		if(gameObjects.size() == 1) {
+			won = true;
+		}
 		disposed.clear();
 		
 		

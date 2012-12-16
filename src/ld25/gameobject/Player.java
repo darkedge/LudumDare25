@@ -125,6 +125,10 @@ public class Player extends GameObject {
 				}
 				if(attackTicks == ATTACK_TICKS / 2) {
 					target.hurt(DAMAGE);
+					health += DAMAGE;
+					if(health > MAX_HEALTH) {
+						health = MAX_HEALTH;
+					}
 					target.playHurtSound();
 				}
 				attackTicks++;

@@ -6,9 +6,6 @@ import java.awt.image.BufferedImage;
 import ld25.Input.Button;
 
 public class IngameScreen {
-	/**
-	 * TODO: HUD, minimap
-	 */
 	private Game game;
 	private World world;
 	private Hud hud;
@@ -26,6 +23,7 @@ public class IngameScreen {
 		if(world.isGameOver() || world.isWon()) {
 			if(Input.getButtonDown(Button.ACCEPT)) {
 				world = new World(game);
+				hud = new Hud(world);
 			}
 		} else {
 			world.tick();
@@ -37,10 +35,10 @@ public class IngameScreen {
 		world.render(g, interpolation);
 		hud.render(g);
 		if(world.isGameOver()) {
-			
+			g.drawImage(gameover, 120 - gameover.getWidth() / 2, 120 - gameover.getHeight() / 2, null);
 		}
 		if(world.isWon()) {
-			
+			g.drawImage(gameover, 120 - gameover.getWidth() / 2, 120 - gameover.getHeight() / 2, null);
 		}
 	}
 }
