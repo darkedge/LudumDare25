@@ -83,9 +83,14 @@ public class Bandit extends GameObject {
 	}
 
 	@Override
-	public void postMovement() {
+	public void checkFlashlight() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	
+	@Override
+	public Type getType() {
+		return Type.BANDIT;
+	}
 }

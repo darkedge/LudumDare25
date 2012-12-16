@@ -80,6 +80,11 @@ public class Goat extends GameObject {
 	}
 
 	@Override
-	public void postMovement() {
+	public void checkFlashlight() {
+	}
+	
+	@Override
+	public Type getType() {
+		return Type.GOAT;
 	}
 }

@@ -18,16 +18,19 @@ public class Player extends GameObject {
 	private int attackTicks;
 	private Flipper attackFlipper;
 	
-	private enum Attack {
+	public enum Attack {
 		NONE, UP, DOWN, LEFT, RIGHT;
 	}
 	
 	public Player(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
-		health = MAX_HEALTH;
 		left = GameImage.get("/img/dogleft.png");
 		right = GameImage.get("/img/dogright.png");
 		currentImage = right;
+	}
+	
+	public Attack getAttack() {
+		return attack;
 	}
 	
 	public void tick() {
@@ -174,6 +177,12 @@ public class Player extends GameObject {
 	}
 
 	@Override
-	public void postMovement() {
+	public void checkFlashlight() {
+		world.checkLights();
+	}
+	
+	@Override
+	public Type getType() {
+		return Type.PLAYER;
 	}
 }

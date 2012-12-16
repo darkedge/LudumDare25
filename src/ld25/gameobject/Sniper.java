@@ -60,7 +60,7 @@ public class Sniper extends GameObject {
 	}
 	
 	@Override
-	public void postMovement() {
+	public void checkFlashlight() {
 		if(currentImage == right) {
 			for(int x = 1; x < 10; x++) {
 				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()) {
@@ -98,5 +98,9 @@ public class Sniper extends GameObject {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	@Override
+	public Type getType() {
+		return Type.SNIPER;
+	}
 }

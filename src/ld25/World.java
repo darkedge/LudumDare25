@@ -2,11 +2,8 @@ package ld25;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 
 import ld25.gameobject.Bandit;
 import ld25.gameobject.GameObject;
@@ -24,15 +21,16 @@ import ld25.util.GameMath;
  * 
  */
 public class World {
-	private static final int WIDTH = 96;
-	private static final int HEIGHT = 96;
+	private static final int WIDTH = 32;
+	private static final int HEIGHT = 32;
 	private Cell[] map = new Cell[WIDTH * HEIGHT];
 	private SpriteSheet sheet;
 	private static final int TILE_SIZE = 16;
 	private Player player;
-	private Overlay overlay;
 	private Camera camera;
 	private BufferedImage blood;
+	private static final int ALERTNESS_TICKS = 50;
+	private int alertness;
 	
 	private int pixelWidth;
 	private int pixelHeight;
@@ -43,11 +41,51 @@ public class World {
 	private int lastX;
 	private int lastY;
 	
+	private int gunnerCount;
+	private int sniperCount;
+	private int goatCount;
+	private int banditCount;
+	
+	private int totalGunnerCount;
+	private int totalSniperCount;
+	private int totalGoatCount;
+	private int totalBanditCount;
+	
 	private HashSet<GameObject> gameObjects = new HashSet<GameObject>();
 	private HashSet<GameObject> disposed = new HashSet<GameObject>();
 	
+	public HashSet<GameObject> getGameObjects() {
+		return gameObjects;
+	}
+	
+	public int getTotalBanditCount() {
+		return totalBanditCount;
+	}
+	public int getTotalGoatCount() {
+		return totalGoatCount;
+	}
+	public int getTotalGunnerCount() {
+		return totalGunnerCount;
+	}
+	public int getTotalSniperCount() {
+		return totalSniperCount;
+	}
+	
 	public Player getPlayer() {
 		return player;
+	}
+	
+	public int getGunnerCount() {
+		return gunnerCount;
+	}
+	public int getSniperCount() {
+		return sniperCount;
+	}
+	public int getGoatCount() {
+		return goatCount;
+	}
+	public int getBanditCount() {
+		return banditCount;
 	}
 
 	public World(Game game) {
@@ -66,7 +104,7 @@ public class World {
 		
 		// Random goats
 		Random r = Game.RANDOM;
-		for(int i = 0; i < 500; i++) {
+		for(int i = 0; i < 50; i++) {
 			int x, y;
 			if(r.nextBoolean()) { // Left or right
 				x = r.nextBoolean() ? r.nextInt(dangerZone) + WIDTH - dangerZone : r.nextInt(dangerZone);
@@ -79,22 +117,31 @@ public class World {
 				int type = r.nextInt(4);
 				switch(type) {
 					case 0:
+						goatCount++;
 						insert(new Goat(this, x, y));
 						break;
 					case 1:
+						gunnerCount++;
 						insert(new Gunner(this, x, y));
 						break;
 					case 2:
+						banditCount++;
 						insert(new Bandit(this, x, y));
 						break;
 					case 3:
+						sniperCount++;
 						insert(new Sniper(this, x, y));
 						break;
 				}
 			}
 		}
 		
-		for(int i = 0; i < 2000; i++) {
+		totalGoatCount = goatCount;
+		totalGunnerCount = gunnerCount;
+		totalBanditCount = banditCount;
+		totalSniperCount = sniperCount;
+		
+		for(int i = 0; i < 200; i++) {
 			int j = r.nextInt(WIDTH * HEIGHT);
 			if(map[j].bush == null) {
 				int x = (j % WIDTH) * getTileSize();
@@ -103,7 +150,6 @@ public class World {
 			}
 		}
 		
-		overlay = new Overlay();
 		camera = new Camera(0, 0, game.getGameHeight(), game.getGameHeight());
 		pixelWidth = WIDTH * TILE_SIZE;
 		pixelHeight = HEIGHT * TILE_SIZE;
@@ -124,6 +170,22 @@ public class World {
 		for(GameObject o : gameObjects) {
 			o.tick();
 			if(o.isDisposed()) {
+				switch(o.getType()) {
+					case BANDIT:
+						banditCount--;
+						break;
+					case GOAT:
+						goatCount--;
+						break;
+					case GUNNER:
+						gunnerCount--;
+						break;
+					case PLAYER:
+						break;
+					case SNIPER:
+						sniperCount--;
+						break;
+				}
 				disposed.add(o);
 			}
 		}
@@ -137,12 +199,14 @@ public class World {
 		
 		
 		// Center around player
-		int px = Math.round(player.getX()) + player.getWidth() / 2 - camera.getWidth() / 2;
-		int py = Math.round(player.getY()) + player.getHeight() / 2 - camera.getHeight() / 2;
-		px = (int) GameMath.clamp(px, 0, WIDTH * TILE_SIZE - camera.getWidth());
-		py = (int) GameMath.clamp(py, 0, HEIGHT * TILE_SIZE
-				- camera.getHeight());
-		camera.setPosition(px, py);
+		if(player.getAttack() == Player.Attack.NONE) {
+			int px = Math.round(player.getX()) + player.getWidth() / 2 - camera.getWidth() / 2;
+			int py = Math.round(player.getY()) + player.getHeight() / 2 - camera.getHeight() / 2;
+			px = (int) GameMath.clamp(px, 0, WIDTH * TILE_SIZE - camera.getWidth());
+			py = (int) GameMath.clamp(py, 0, HEIGHT * TILE_SIZE
+					- camera.getHeight());
+			camera.setPosition(px, py);
+		}
 
 		// Tile culling
 		int cx1 = camera.getX();
@@ -153,8 +217,6 @@ public class World {
 		lastX = GameMath.clamp(cx2 / TILE_SIZE, 0, WIDTH - 1);
 		firstY = GameMath.clamp(cy1 / TILE_SIZE, 0, HEIGHT - 1);
 		lastY = GameMath.clamp(cy2 / TILE_SIZE, 0, HEIGHT - 1);
-
-		overlay.tick();
 	}
 
 	public void render(Graphics2D g, double interpolation) {
@@ -181,8 +243,6 @@ public class World {
 				}
 			}
 		}
-		
-		overlay.render(camera, interpolation);
 	}
 	
 	public boolean isClear(int x, int y) {
@@ -241,5 +301,22 @@ public class World {
 			return map[y * WIDTH + x].gameObject;
 		}
 		return null;
+	}
+	
+	public void checkLights() {
+		for(GameObject o : gameObjects) {
+			o.checkFlashlight();
+		}
+	}
+
+	public void shout(GameObject shouter) {
+		int rangeSq = 5 * 5;
+		for(GameObject o : gameObjects) {
+			int dx = o.getMapX() - shouter.getMapX();
+			int dy = o.getMapY() - shouter.getMapY();
+			if(dx * dx + dy * dy <= rangeSq) {
+				o.alert();
+			}
+		}
 	}
 }

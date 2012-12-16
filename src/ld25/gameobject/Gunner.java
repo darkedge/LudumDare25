@@ -84,23 +84,30 @@ public class Gunner extends GameObject {
 	}
 
 	@Override
-	public void postMovement() {
+	public void checkFlashlight() {
 		if(currentImage == right) {
 			for(int x = 1; x < 3; x++) {
-				for(int y = 1; y < 4; y++) {
+				for(int y = -1; y < 2; y++) {
 					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()) {
 						state = State.ALERTED;
+						world.shout(this);
 					}
 				}
 			}
 		} else {
 			for(int x = -2; x < 0; x++) {
-				for(int y = -3; y < 0; y++) {
+				for(int y = -1; y < 2; y++) {
 					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()) {
 						state = State.ALERTED;
+						world.shout(this);
 					}
 				}
 			}
 		}
+	}
+	
+	@Override
+	public Type getType() {
+		return Type.GUNNER;
 	}
 }

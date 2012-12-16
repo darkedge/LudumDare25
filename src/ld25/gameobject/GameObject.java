@@ -28,6 +28,10 @@ public abstract class GameObject {
 	protected BufferedImage right;
 	private BufferedImage alerted = GameImage.get("/img/shout.png");
 	
+	public enum Type {
+		GUNNER, BANDIT, SNIPER, GOAT, PLAYER
+	}
+	
 	public enum Direction {
 		STILL, LEFT, RIGHT, UP, DOWN;
 	}
@@ -46,9 +50,12 @@ public abstract class GameObject {
 		health = getMaxHealth();
 	}
 	
+	public abstract Type getType();
+	
 	public void hurt(int damage) {
 		health -= damage;
 		if(health < getMaxHealth()) {
+			state = State.ALERTED;
 			world.getMap()[mapy * world.getWidth() + mapx].blood = true;
 			showHealth = true;
 		}
@@ -147,12 +154,16 @@ public abstract class GameObject {
 				direction = Direction.STILL;
 				x = mapx * world.getTileSize();
 				y = mapy * world.getTileSize();
-				postMovement();
+				checkFlashlight();
 			}
 		}
 	}
 	
-	public abstract void postMovement();
+	public void alert() {
+		state = State.ALERTED;
+	}
+	
+	public abstract void checkFlashlight();
 
 	public void render(Camera camera, double interpolation) {
 		camera.drawImage(currentImage, x, y);
