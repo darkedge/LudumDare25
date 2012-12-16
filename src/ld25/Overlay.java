@@ -17,7 +17,7 @@ public class Overlay {
 	public Overlay() {
 		alphaflipper = new Flipper(0.2f, 1.0f);
 		try {
-			vignet = ImageIO.read(Overlay.class.getResourceAsStream("/vignet.png"));
+			vignet = ImageIO.read(Overlay.class.getResourceAsStream("/img/vignet.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

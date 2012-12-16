@@ -49,6 +49,7 @@ public abstract class GameObject {
 			playDeathSound();
 			isColliding = false;
 			showHealth = false;
+			dispose();
 		} else {
 			playHurtSound();
 		}
@@ -150,6 +151,14 @@ public abstract class GameObject {
 			camera.getGraphics().setColor(Color.red);
 			camera.fillRect(Math.round(x) + 1, Math.round(y - 5) + 1, (int) Math.ceil((float) health / getMaxHealth() * width - 2), height - 2); // Red HP bar
 		}
+	}
+	
+	public int getWidth() {
+		return currentImage.getWidth();
+	}
+	
+	public int getHeight() {
+		return currentImage.getHeight();
 	}
 
 	public int getMapX() {

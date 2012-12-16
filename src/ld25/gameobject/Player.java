@@ -1,5 +1,7 @@
 package ld25.gameobject;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -8,18 +10,15 @@ import javax.imageio.ImageIO;
 import ld25.Camera;
 import ld25.Input;
 import ld25.Input.Button;
-import ld25.util.Flipper;
 import ld25.World;
+import ld25.util.Flipper;
 
 public class Player extends GameObject {
-	private BufferedImage left;
-	private BufferedImage right;
-	private BufferedImage currentSprite;
 	private static final int MAX_HEALTH = 100;
 	private static final int DAMAGE = 10;
 	private Attack attack = Attack.NONE;
-	private static final int ATTACK_TICKS = 10;
-	private static final int COOLDOWN_TICKS = 15;
+	private static final int ATTACK_TICKS = 15;
+	private static final int COOLDOWN_TICKS = 10;
 	private GameObject target;
 	private int cooldownTicks;
 	private int attackTicks;
@@ -33,9 +32,9 @@ public class Player extends GameObject {
 		super(world, mapx, mapy);
 		health = MAX_HEALTH;
 		try {
-			left = ImageIO.read(World.class.getResourceAsStream("/dogleft.png"));
-			right = ImageIO.read(World.class.getResourceAsStream("/dogright.png"));
-			currentSprite = right;
+			left = ImageIO.read(World.class.getResourceAsStream("/img/dogleft.png"));
+			right = ImageIO.read(World.class.getResourceAsStream("/img/dogright.png"));
+			currentImage = right;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -47,7 +46,7 @@ public class Player extends GameObject {
 			cooldownTicks--;
 			if(cooldownTicks < 0) cooldownTicks = 0;
 			if (Input.getButton(Button.LEFT)) {
-				currentSprite = left;
+				currentImage = left;
 				if (!tryMove(Direction.LEFT)) {
 					other = world.getGameObjectAt(mapx - 1, mapy);
 					if(other != null) {
@@ -56,7 +55,7 @@ public class Player extends GameObject {
 				}
 			}
 			else if (Input.getButton(Button.RIGHT)) {
-				currentSprite = right;
+				currentImage = right;
 				if (!tryMove(Direction.RIGHT)) {
 					other = world.getGameObjectAt(mapx + 1, mapy);
 					if(other != null) {
@@ -142,7 +141,7 @@ public class Player extends GameObject {
 	}
 
 	public void render(Camera camera, double interpolation) {
-		camera.drawImage(currentSprite, x, y);
+		camera.drawImage(currentImage, x, y);
 	}
 	
 	public float getX() {
@@ -159,14 +158,6 @@ public class Player extends GameObject {
 	
 	public int getMapY() {
 		return mapy;
-	}
-	
-	public int getWidth() {
-		return currentSprite.getWidth();
-	}
-	
-	public int getHeight() {
-		return currentSprite.getHeight();
 	}
 
 	@Override

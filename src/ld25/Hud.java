@@ -25,7 +25,7 @@ public class Hud {
 	public Hud(World world) {
 		this.world = world;
 		try {
-			image = ImageIO.read(Hud.class.getResourceAsStream("/hud.png"));
+			image = ImageIO.read(Hud.class.getResourceAsStream("/img/hud.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

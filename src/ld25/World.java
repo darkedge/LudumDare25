@@ -48,9 +48,9 @@ public class World {
 
 	public World(Game game) {
 		try {
-			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/test.png"));
+			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/img/test.png"));
 			sheet = new SpriteSheet(image, TILE_SIZE);
-			blood = ImageIO.read(World.class.getResourceAsStream("/blood.png"));
+			blood = ImageIO.read(World.class.getResourceAsStream("/img/blood.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,6 +91,15 @@ public class World {
 						insert(new Sniper(this, x, y));
 						break;
 				}
+			}
+		}
+		
+		for(int i = 0; i < 2000; i++) {
+			int j = r.nextInt(WIDTH * HEIGHT);
+			if(map[j].bush == null) {
+				int x = (j % WIDTH) * getTileSize();
+				int y = (j / WIDTH) * getTileSize();
+				map[j].bush = new Bush(x, y);
 			}
 		}
 		
@@ -162,6 +171,15 @@ public class World {
 
 		for(GameObject o : gameObjects) {
 			o.render(camera, interpolation);
+		}
+		
+		// Bushes
+		for (int x = firstX; x <= lastX; x++) {
+			for (int y = firstY; y <= lastY; y++) {
+				if(map[y * WIDTH + x].bush != null) {
+					map[y * WIDTH + x].bush.render(camera, interpolation);
+				}
+			}
 		}
 		
 		overlay.render(camera, interpolation);

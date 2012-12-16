@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import ld25.Camera;
 import ld25.Game;
 import ld25.World;
 import ld25.gameobject.GameObject.Direction;
@@ -20,8 +21,8 @@ public class Sniper extends GameObject {
 		super(world, mapx, mapy);
 
 		try {
-			left = ImageIO.read(Goat.class.getResourceAsStream("/sniperleft.png"));
-			right = ImageIO.read(Goat.class.getResourceAsStream("/sniperright.png"));
+			left = ImageIO.read(Goat.class.getResourceAsStream("/img/sniperleft.png"));
+			right = ImageIO.read(Goat.class.getResourceAsStream("/img/sniperright.png"));
 			currentImage = left;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -54,6 +55,16 @@ public class Sniper extends GameObject {
 		}
 		
 		doMovement();
+	}
+	
+	@Override
+	public void render(Camera camera, double interpolation) {
+		super.render(camera, interpolation);
+		camera.drawFlashlight((int) x + getWidth() / 2,
+		                      (int) y + getHeight() / 2,
+		                      (int) (3.5f * world.getTileSize()),
+		                      world.getTileSize(),
+		                      currentImage == right);
 	}
 
 	@Override

@@ -20,8 +20,8 @@ public class Goat extends GameObject {
 		super(world, mapx, mapy);
 		
 		try {
-			left = ImageIO.read(Goat.class.getResourceAsStream("/goatleft.png"));
-			right = ImageIO.read(Goat.class.getResourceAsStream("/goatright.png"));
+			left = ImageIO.read(Goat.class.getResourceAsStream("/img/goatleft.png"));
+			right = ImageIO.read(Goat.class.getResourceAsStream("/img/goatright.png"));
 			currentImage = left;
 		} catch (IOException e) {
 			e.printStackTrace();

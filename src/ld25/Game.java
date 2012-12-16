@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferStrategy;
 import java.util.Random;
 
@@ -15,7 +16,7 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	// Constants
-	private static final String TITLE = "Revenge Of The Goat Slayer";
+	private static final String TITLE = "Revenge Of The Vampire Goat Killer";
 	private static final int WIDTH = 320;
 	private static final int HEIGHT = 240;
 	private static final int SCALE = 2;
@@ -99,6 +100,7 @@ public class Game extends Canvas implements Runnable {
 		}
 		
 		Graphics2D g = (Graphics2D) bs.getDrawGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(Color.black);
 		g.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
 		g.scale(2, 2);
