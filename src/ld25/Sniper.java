@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Sniper extends GameObject {
+	private static final int MAX_HEALTH = 30;
 	private static final int MIN_THINK_TICKS = 120;
 	private static final float MOVE_CHANCE = 0.5f;
 	private static final int VAR_THINK_TICKS = 60;
@@ -49,6 +50,29 @@ public class Sniper extends GameObject {
 		}
 		
 		doMovement();
+	}
+
+	@Override
+	protected void playDeathSound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void playHurtSound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return MAX_HEALTH;
+	}
+
+	@Override
+	protected void playAttackSound() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

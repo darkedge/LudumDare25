@@ -201,4 +201,11 @@ public class World {
 		object.setMapX(x);
 		object.setMapY(y);
 	}
+
+	public GameObject getGameObjectAt(int x, int y) {
+		if(x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
+			return map[y * WIDTH + x].gameObject;
+		}
+		return null;
+	}
 }

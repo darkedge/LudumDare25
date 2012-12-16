@@ -48,4 +48,22 @@ public class Camera {
 	public Graphics2D getGraphics() {
 		return g;
 	}
+
+	public void drawRect(int x, int y, int width, int height) {
+		Rectangle2D rectt = new Rectangle2D.Float(x, y, width, height);
+		if(rect.intersects(rectt)) {
+			x -= rect.getX();
+			y -= rect.getY();
+			g.drawRect(x, y, width, height);
+		}
+	}
+
+	public void fillRect(int x, int y, int width, int height) {
+		Rectangle2D rectt = new Rectangle2D.Float(x, y, width, height);
+		if(rect.intersects(rectt)) {
+			x -= rect.getX();
+			y -= rect.getY();
+			g.fillRect(x, y, width, height);
+		}
+	}
 }

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Goat extends GameObject {
+	private static final int MAX_HEALTH = 30;
 	private static final int MIN_THINK_TICKS = Game.TICK_RATE;
 	private static final float MOVE_CHANCE = 0.2f;
 	private static final int VAR_THINK_TICKS = 30;
@@ -49,5 +50,28 @@ public class Goat extends GameObject {
 		}
 		
 		doMovement();
+	}
+
+	@Override
+	protected void playDeathSound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void playHurtSound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return MAX_HEALTH;
+	}
+
+	@Override
+	protected void playAttackSound() {
+		// TODO Auto-generated method stub
+		
 	}
 }

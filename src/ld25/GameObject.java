@@ -1,5 +1,6 @@
 package ld25;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 public abstract class GameObject {
@@ -14,6 +15,8 @@ public abstract class GameObject {
 	private int movementTicks;
 	protected int health;
 	private boolean isColliding;
+	private boolean showHealth = false;
+	private boolean canMove = true;
 	
 	protected BufferedImage currentImage;
 	protected BufferedImage left;
@@ -29,24 +32,43 @@ public abstract class GameObject {
 		this.mapy = mapy;
 		x = mapx * world.getTileSize();
 		y = mapy * world.getTileSize();
+		health = getMaxHealth();
 	}
 	
 	public void hurt(int damage) {
 		health -= damage;
+		if(health < getMaxHealth()) {
+			showHealth = true;
+		}
 		if(health <= 0) {
 			// TODO Add sound here
 			playDeathSound();
 			isColliding = false;
+			showHealth = false;
 		} else {
 			playHurtSound();
 		}
 	}
 	
+	public void lock() {
+		canMove = false;
+	}
+	
+	public void release() {
+		canMove = true;
+	}
+	
 	protected abstract void playDeathSound();
 	
 	protected abstract void playHurtSound();
+	protected abstract void playAttackSound();
+	
+	public abstract int getMaxHealth();
 	
 	protected boolean tryMove(Direction movement) {
+		if(!canMove) {
+			return false;
+		}
 		boolean success = false;
 		switch(movement) {
 			case LEFT:
@@ -111,6 +133,12 @@ public abstract class GameObject {
 
 	public void render(Camera camera, double interpolation) {
 		camera.drawImage(currentImage, x, y);
+		if(showHealth) {
+			final int height = 3;
+			final int width = world.getTileSize();
+			camera.getGraphics().setColor(Color.red);
+			camera.fillRect(Math.round(x) + 1, Math.round(y - 5) + 1, (int) Math.ceil((float) health / getMaxHealth() * width - 2), height - 2); // Red HP bar
+		}
 	}
 
 	public int getMapX() {

@@ -26,6 +26,9 @@ public class Flipper extends Picker {
 		this(min, max, start, 0, forward);
 	}
 	
+	/**
+	 * Updates the position with f.
+	 */
 	public void tick(float f) {
 		if(forward) position += f;
 		else position -= f;
@@ -37,5 +40,9 @@ public class Flipper extends Picker {
 			forward = !forward;
 		}
 		if(var != 0) value = Math.round((position - min) * var);
+	}
+	
+	public void tickPercentage(float p) {
+		tick(p * (max - min));
 	}
 }

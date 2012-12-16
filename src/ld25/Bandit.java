@@ -15,7 +15,6 @@ public class Bandit extends GameObject {
 
 	public Bandit(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
-		health = MAX_HEALTH;
 		try {
 			left = ImageIO.read(Goat.class.getResourceAsStream("/banditleft.png"));
 			right = ImageIO.read(Goat.class.getResourceAsStream("/banditright.png"));
@@ -51,6 +50,29 @@ public class Bandit extends GameObject {
 		}
 		
 		doMovement();
+	}
+
+	@Override
+	protected void playDeathSound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void playHurtSound() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return MAX_HEALTH;
+	}
+
+	@Override
+	protected void playAttackSound() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
