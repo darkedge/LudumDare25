@@ -10,10 +10,12 @@ public class Bandit extends GameObject {
 	private static final int VAR_THINK_TICKS = 10;
 	
 	private int ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
+	
+	private static final int MAX_HEALTH = 30;
 
 	public Bandit(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
-
+		health = MAX_HEALTH;
 		try {
 			left = ImageIO.read(Goat.class.getResourceAsStream("/banditleft.png"));
 			right = ImageIO.read(Goat.class.getResourceAsStream("/banditright.png"));

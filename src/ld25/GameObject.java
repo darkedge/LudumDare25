@@ -12,6 +12,8 @@ public abstract class GameObject {
 	protected Direction direction = Direction.STILL;
 	public static final int MOVEMENT_TICKS = 15;
 	private int movementTicks;
+	protected int health;
+	private boolean isColliding;
 	
 	protected BufferedImage currentImage;
 	protected BufferedImage left;
@@ -28,6 +30,21 @@ public abstract class GameObject {
 		x = mapx * world.getTileSize();
 		y = mapy * world.getTileSize();
 	}
+	
+	public void hurt(int damage) {
+		health -= damage;
+		if(health <= 0) {
+			// TODO Add sound here
+			playDeathSound();
+			isColliding = false;
+		} else {
+			playHurtSound();
+		}
+	}
+	
+	protected abstract void playDeathSound();
+	
+	protected abstract void playHurtSound();
 	
 	protected boolean tryMove(Direction movement) {
 		boolean success = false;
