@@ -1,4 +1,4 @@
-package ld25;
+package ld25.util;
 
 public class Looper extends Picker {
 	public Looper(float min, float max, float start, int steps, boolean forward) {

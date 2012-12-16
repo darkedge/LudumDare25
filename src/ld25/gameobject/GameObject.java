@@ -1,7 +1,10 @@
-package ld25;
+package ld25.gameobject;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+
+import ld25.Camera;
+import ld25.World;
 
 public abstract class GameObject {
 	private boolean isDisposed = false;
@@ -22,7 +25,7 @@ public abstract class GameObject {
 	protected BufferedImage left;
 	protected BufferedImage right;
 	
-	enum Direction {
+	public enum Direction {
 		STILL, LEFT, RIGHT, UP, DOWN;
 	}
 	

@@ -1,4 +1,4 @@
-package ld25;
+package ld25.util;
 
 /**
  * Some simple math tools that I like to use
@@ -6,19 +6,19 @@ package ld25;
  *
  */
 public class GameMath {
-	static float clamp(float a, float min, float max) {
+	public static float clamp(float a, float min, float max) {
 		return a < min ? min : a > max ? max : a;
 	}
 	
-	static long clamp(long a, long min, long max) {
+	public static long clamp(long a, long min, long max) {
 		return a < min ? min : a > max ? max : a;
 	}
 	
-	static int clamp(int a, int min, int max) {
+	public static int clamp(int a, int min, int max) {
 		return a < min ? min : a > max ? max : a;
 	}
 	
-	static float max(float... a) {
+	public static float max(float... a) {
 		float max = a[0];
 		for(float b : a) {
 			if (b > max) max = b;
@@ -26,7 +26,7 @@ public class GameMath {
 		return max;
 	}
 	
-	static float min(float... a) {
+	public static float min(float... a) {
 		float min = a[0];
 		for(float b : a) {
 			if (b < min) min = b;

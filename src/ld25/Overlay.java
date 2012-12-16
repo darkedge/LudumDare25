@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import ld25.util.Flipper;
+
 public class Overlay {
 	private Flipper alphaflipper;
 	private Color color;

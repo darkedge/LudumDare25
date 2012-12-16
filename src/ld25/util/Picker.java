@@ -1,4 +1,4 @@
-package ld25;
+package ld25.util;
 
 public abstract class Picker {
 	protected float min;

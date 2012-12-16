@@ -1,4 +1,4 @@
-package ld25;
+package ld25.util;
 
 /**
  * TODO: add a delegate for customized interpolation

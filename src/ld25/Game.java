@@ -9,6 +9,8 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import ld25.util.GameMath;
+
 public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
