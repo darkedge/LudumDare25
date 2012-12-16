@@ -10,8 +10,6 @@ public class Sniper extends GameObject {
 	private static final int MIN_THINK_TICKS = 120;
 	private static final float MOVE_CHANCE = 0.5f;
 	private static final int VAR_THINK_TICKS = 60;
-	
-	private int ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
 
 	public Sniper(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
@@ -19,34 +17,6 @@ public class Sniper extends GameObject {
 		left = GameImage.get("/img/sniperleft.png");
 		right = GameImage.get("/img/sniperright.png");
 		currentImage = left;
-	}
-
-	@Override
-	public void tick() {
-		if(direction == Direction.STILL) {
-			ticks--;
-			if(ticks < 0) {
-				if(Game.RANDOM.nextFloat() < MOVE_CHANCE) {
-					switch(Game.RANDOM.nextInt(4)) {
-						case 0:
-							tryMove(Direction.UP);
-							break;
-						case 1:
-							tryMove(Direction.DOWN);
-							break;
-						case 2:
-							if (tryMove(Direction.LEFT)) currentImage = left;
-							break;
-						case 3:
-							if (tryMove(Direction.RIGHT)) currentImage = right;
-							break;
-					}
-				}
-				ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
-			}
-		}
-		
-		doMovement();
 	}
 	
 	@Override
@@ -61,20 +31,24 @@ public class Sniper extends GameObject {
 	
 	@Override
 	public void checkFlashlight() {
+		if(checkedFlashlight) return;
+		checkedFlashlight = true;
 		if(currentImage == right) {
-			for(int x = 1; x < 7; x++) {
+			for(int x = 1; x < 8; x++) {
 				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()
 						&& world.getBush(mapx + x, mapy) == null) {
-					state = State.ALERTED;
+					state = State.HOMING;
 					world.shout(this);
+					shoot();
 				}
 			}
 		} else {
 			for(int x = -7; x < 0; x++) {
 				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()
 						&& world.getBush(mapx + x, mapy) == null) {
-					state = State.ALERTED;
+					state = State.HOMING;
 					world.shout(this);
+					shoot();
 				}
 			}
 		}
@@ -106,5 +80,30 @@ public class Sniper extends GameObject {
 	@Override
 	public Type getType() {
 		return Type.SNIPER;
+	}
+
+	@Override
+	protected int getMinThinkTicks() {
+		return MIN_THINK_TICKS;
+	}
+
+	@Override
+	protected int getVarThinkTicks() {
+		return VAR_THINK_TICKS;
+	}
+
+	@Override
+	protected float getMoveChance() {
+		return MOVE_CHANCE;
+	}
+	
+	@Override
+	protected int getShootTicks() {
+		return 2 * Game.TICK_RATE;
+	}
+	
+	@Override
+	protected int getDamage() {
+		return 30;
 	}
 }

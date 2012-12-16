@@ -12,42 +12,12 @@ public class Gunner extends GameObject {
 	private static final float MOVE_CHANCE = 0.4f;
 	private static final int VAR_THINK_TICKS = 30;
 	
-	private int ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
-	
 	public Gunner(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
 
 		left = GameImage.get("/img/gunnerleft.png");
 		right = GameImage.get("/img/gunnerright.png");
 		currentImage = left;
-	}
-
-	@Override
-	public void tick() {
-		if(direction == Direction.STILL) {
-			ticks--;
-			if(ticks < 0) {
-				if(Game.RANDOM.nextFloat() < MOVE_CHANCE) {
-					switch(Game.RANDOM.nextInt(4)) {
-						case 0:
-							tryMove(Direction.UP);
-							break;
-						case 1:
-							tryMove(Direction.DOWN);
-							break;
-						case 2:
-							if (tryMove(Direction.LEFT)) currentImage = left;
-							break;
-						case 3:
-							if (tryMove(Direction.RIGHT)) currentImage = right;
-							break;
-					}
-				}
-				ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
-			}
-		}
-		
-		doMovement();
 	}
 	
 	@Override
@@ -85,13 +55,16 @@ public class Gunner extends GameObject {
 
 	@Override
 	public void checkFlashlight() {
+		if(checkedFlashlight) return;
+		checkedFlashlight = true;
 		if(currentImage == right) {
 			for(int x = 1; x < 3; x++) {
 				for(int y = -1; y < 2; y++) {
 					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()
 							&& world.getBush(mapx + x, mapy + y) == null) {
-						state = State.ALERTED;
+						state = State.HOMING;
 						world.shout(this);
+						shoot();
 					}
 				}
 			}
@@ -100,8 +73,9 @@ public class Gunner extends GameObject {
 				for(int y = -1; y < 2; y++) {
 					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()
 							&& world.getBush(mapx + x, mapy + y) == null) {
-						state = State.ALERTED;
+						state = State.HOMING;
 						world.shout(this);
+						shoot();
 					}
 				}
 			}
@@ -111,5 +85,30 @@ public class Gunner extends GameObject {
 	@Override
 	public Type getType() {
 		return Type.GUNNER;
+	}
+
+	@Override
+	protected int getMinThinkTicks() {
+		return MIN_THINK_TICKS;
+	}
+
+	@Override
+	protected int getVarThinkTicks() {
+		return VAR_THINK_TICKS;
+	}
+
+	@Override
+	protected float getMoveChance() {
+		return MOVE_CHANCE;
+	}
+	
+	@Override
+	protected int getShootTicks() {
+		return Game.TICK_RATE / 2;
+	}
+	
+	@Override
+	protected int getDamage() {
+		return 5;
 	}
 }

@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import ld25.Camera;
+import ld25.Game;
 import ld25.GameImage;
 import ld25.World;
 
@@ -21,12 +22,23 @@ public abstract class GameObject {
 	private boolean isColliding;
 	private boolean showHealth = false;
 	private boolean canMove = true;
+	private static final int LOST_TICKS = Game.TICK_RATE;
+	private int lostTicks;
+	protected boolean checkedFlashlight = false;
 	protected State state;
+	private int ticks = getMinThinkTicks() + Game.RANDOM.nextInt(getVarThinkTicks());
 	
+	protected abstract int getMinThinkTicks();
+	protected abstract int getVarThinkTicks();
+	protected abstract float getMoveChance();
+	
+	private int laserTicks;
+	private static final int LASER_TICKS = 6;
 	protected BufferedImage currentImage;
 	protected BufferedImage left;
 	protected BufferedImage right;
 	private BufferedImage alerted = GameImage.get("/img/shout.png");
+	private BufferedImage lost = GameImage.get("/img/lost.png");
 	
 	public enum Type {
 		GUNNER, BANDIT, SNIPER, GOAT, PLAYER
@@ -37,7 +49,7 @@ public abstract class GameObject {
 	}
 	
 	public enum State {
-		IDLE, FLEEING, ALERTED, LOST;
+		IDLE, FLEEING, HOMING, LOST;
 	}
 	
 	public GameObject(World world, int mapx, int mapy) {
@@ -55,7 +67,7 @@ public abstract class GameObject {
 	public void hurt(int damage) {
 		health -= damage;
 		if(health < getMaxHealth()) {
-			state = State.ALERTED;
+			state = State.HOMING;
 			world.shout(this);
 			world.getMap()[mapy * world.getWidth() + mapx].blood = true;
 			showHealth = true;
@@ -89,6 +101,19 @@ public abstract class GameObject {
 	protected abstract void playAttackSound();
 	
 	public abstract int getMaxHealth();
+	
+	private int shootTicks;
+	
+	public void shoot() {
+		if(shootTicks == 0) {
+			laserTicks = LASER_TICKS;
+			world.getPlayer().hurt(getDamage());
+			shootTicks = getShootTicks();
+		}
+	}
+	
+	protected abstract int getDamage();
+	protected abstract int getShootTicks();
 	
 	protected boolean tryMove(Direction movement) {
 		if(!canMove) {
@@ -128,7 +153,70 @@ public abstract class GameObject {
 		isDisposed = true;
 	}
 	
-	public abstract void tick();
+	public void tick() {
+		shootTicks--;
+		if(shootTicks < 0) shootTicks = 0;
+		checkedFlashlight = false;
+		laserTicks--;
+		if(laserTicks < 0) {
+			laserTicks = 0;
+		}
+		if(direction == Direction.STILL) {
+			ticks--;
+			if(ticks < 0) {
+				act();
+			}
+		}
+		
+		doMovement();
+	}
+	
+	private void act() {
+		switch(state) {
+			case FLEEING:
+				break;
+			case HOMING:
+				int dx = world.getPlayer().getMapX() - mapx;
+				int dy = world.getPlayer().getMapY() - mapy;
+				Direction dir;
+				if(dx * dx > dy * dy) {
+					if(dx > 0) {
+						dir = Direction.RIGHT;
+						currentImage = right;
+					} else {
+						dir = Direction.LEFT;
+						currentImage = left;
+					}
+				} else {
+					dir = dy > 0 ? Direction.DOWN : Direction.UP;
+				}
+				tryMove(dir);
+				ticks = getMinThinkTicks();
+				break;
+			case IDLE:
+				if(Game.RANDOM.nextFloat() < getMoveChance()) {
+					switch(Game.RANDOM.nextInt(4)) {
+						case 0:
+							tryMove(Direction.UP);
+							break;
+						case 1:
+							tryMove(Direction.DOWN);
+							break;
+						case 2:
+							if (tryMove(Direction.LEFT)) currentImage = left;
+							break;
+						case 3:
+							if (tryMove(Direction.RIGHT)) currentImage = right;
+							break;
+					}
+				}
+				ticks = getMinThinkTicks() + Game.RANDOM.nextInt(getVarThinkTicks());
+				break;
+			case LOST:
+				break;
+			
+		}
+	}
 	
 	public void doMovement() {
 		if(direction != Direction.STILL) {
@@ -161,7 +249,7 @@ public abstract class GameObject {
 	}
 	
 	public void alert() {
-		state = State.ALERTED;
+		state = State.HOMING;
 	}
 	
 	public abstract void checkFlashlight();
@@ -174,8 +262,19 @@ public abstract class GameObject {
 			camera.getGraphics().setColor(Color.red);
 			camera.fillRect(Math.round(x) + 1, Math.round(y - 5) + 1, (int) Math.ceil((float) health / getMaxHealth() * width - 2), height - 2); // Red HP bar
 		}
-		if(state == State.ALERTED) {
+		if(state == State.HOMING) {
 			camera.drawImage(alerted, x, y - 11);
+		}
+		if(state == State.LOST) {
+			camera.drawImage(lost, x, y - 11);
+		}
+		if(laserTicks > 0) {
+			int x1 = (int) x + world.getTileSize() / 2 - camera.getX();
+			int y1 = (int) y + world.getTileSize() / 2 - camera.getY();
+			int x2 = (int) world.getPlayer().getX() + world.getPlayer().getWidth() / 2 - camera.getX();
+			int y2 = (int) world.getPlayer().getY() + world.getPlayer().getHeight() / 2 - camera.getY();
+			camera.getGraphics().setColor(Color.yellow);
+			camera.getGraphics().drawLine(x1, y1, x2, y2);
 		}
 	}
 	

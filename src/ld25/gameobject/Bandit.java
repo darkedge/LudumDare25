@@ -11,8 +11,6 @@ public class Bandit extends GameObject {
 	private static final float MOVE_CHANCE = 1.0f;
 	private static final int VAR_THINK_TICKS = 10;
 	
-	private int ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
-	
 	private static final int MAX_HEALTH = 30;
 
 	public Bandit(World world, int mapx, int mapy) {
@@ -20,34 +18,6 @@ public class Bandit extends GameObject {
 		left = GameImage.get("/img/banditleft.png");
 		right = GameImage.get("/img/banditright.png");
 		currentImage = left;
-	}
-
-	@Override
-	public void tick() {
-		if(direction == Direction.STILL) {
-			ticks--;
-			if(ticks < 0) {
-				if(Game.RANDOM.nextFloat() < MOVE_CHANCE) {
-					switch(Game.RANDOM.nextInt(4)) {
-						case 0:
-							tryMove(Direction.UP);
-							break;
-						case 1:
-							tryMove(Direction.DOWN);
-							break;
-						case 2:
-							if (tryMove(Direction.LEFT)) currentImage = left;
-							break;
-						case 3:
-							if (tryMove(Direction.RIGHT)) currentImage = right;
-							break;
-					}
-				}
-				ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
-			}
-		}
-		
-		doMovement();
 	}
 	
 	@Override
@@ -85,20 +55,24 @@ public class Bandit extends GameObject {
 
 	@Override
 	public void checkFlashlight() {
+		if(checkedFlashlight) return;
+		checkedFlashlight = true;
 		if(currentImage == right) {
 			for(int x = 1; x < 3; x++) {
 				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()
 						&& world.getBush(mapx + x, mapy) == null) {
-					state = State.ALERTED;
+					state = State.HOMING;
 					world.shout(this);
+					shoot();
 				}
 			}
 		} else {
 			for(int x = -2; x < 0; x++) {
 				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()
 						&& world.getBush(mapx + x, mapy) == null) {
-					state = State.ALERTED;
+					state = State.HOMING;
 					world.shout(this);
+					shoot();
 				}
 			}
 		}
@@ -108,5 +82,30 @@ public class Bandit extends GameObject {
 	@Override
 	public Type getType() {
 		return Type.BANDIT;
+	}
+	
+	@Override
+	protected int getMinThinkTicks() {
+		return MIN_THINK_TICKS;
+	}
+
+	@Override
+	protected int getVarThinkTicks() {
+		return VAR_THINK_TICKS;
+	}
+
+	@Override
+	protected float getMoveChance() {
+		return MOVE_CHANCE;
+	}
+	
+	@Override
+	protected int getShootTicks() {
+		return Game.TICK_RATE;
+	}
+	
+	@Override
+	protected int getDamage() {
+		return 10;
 	}
 }

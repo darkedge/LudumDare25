@@ -33,6 +33,8 @@ public class Player extends GameObject {
 		return attack;
 	}
 	
+	
+	@Override
 	public void tick() {
 		GameObject other = null;
 		if(direction == Direction.STILL && attack == Attack.NONE) {
@@ -93,6 +95,10 @@ public class Player extends GameObject {
 	@Override
 	public void hurt(int damage) {
 		health -= damage;
+		if(health < 0) {
+			health = 0;
+			world.gameOver();
+		}
 	}
 	
 	public int getHealth() {
@@ -184,5 +190,30 @@ public class Player extends GameObject {
 	@Override
 	public Type getType() {
 		return Type.PLAYER;
+	}
+
+	@Override
+	protected int getMinThinkTicks() {
+		return 1;
+	}
+
+	@Override
+	protected int getVarThinkTicks() {
+		return 1;
+	}
+
+	@Override
+	protected float getMoveChance() {
+		return 1.0f;
+	}
+	
+	@Override
+	protected int getShootTicks() {
+		return 42424242;
+	}
+	
+	@Override
+	protected int getDamage() {
+		return DAMAGE;
 	}
 }

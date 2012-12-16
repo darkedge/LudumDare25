@@ -59,9 +59,11 @@ public class Hud {
 		// minimap dots
 		g.setColor(Color.white);
 		for(GameObject o : world.getGameObjects()) {
-			int x = (int) ((float) o.getMapX() / w * MINIMAP_WIDTH) + MINIMAP_X;
-			int y = (int) ((float) o.getMapY() / h * MINIMAP_HEIGHT) + MINIMAP_Y;
-			g.drawLine(x, y, x, y);
+			if(o != world.getPlayer()) {
+				int x = (int) ((float) o.getMapX() / w * MINIMAP_WIDTH) + MINIMAP_X;
+				int y = (int) ((float) o.getMapY() / h * MINIMAP_HEIGHT) + MINIMAP_Y;
+				g.drawLine(x, y, x, y);
+			}
 		}
 		
 		// minimap camera rect

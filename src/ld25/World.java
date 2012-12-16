@@ -41,15 +41,18 @@ public class World {
 	private int lastX;
 	private int lastY;
 	
-	private int gunnerCount;
-	private int sniperCount;
-	private int goatCount;
-	private int banditCount;
+	private int gunnerCount = 0;
+	private int sniperCount = 0;
+	private int goatCount = 0;
+	private int banditCount = 0;
+
+	private int totalGunnerCount = 0;
+	private int totalSniperCount = 0;
+	private int totalGoatCount = 0;
+	private int totalBanditCount = 0;
 	
-	private int totalGunnerCount;
-	private int totalSniperCount;
-	private int totalGoatCount;
-	private int totalBanditCount;
+	private boolean won = false;
+	private boolean gameOver = false;
 	
 	private HashSet<GameObject> gameObjects = new HashSet<GameObject>();
 	private HashSet<GameObject> disposed = new HashSet<GameObject>();
@@ -100,7 +103,7 @@ public class World {
 		player = new Player(this, WIDTH / 2, HEIGHT / 2);
 		insert(player);
 		
-		int dangerZone = 16;
+		int dangerZone = 8;
 		
 		// Random goats
 		Random r = Game.RANDOM;
@@ -348,5 +351,17 @@ public class World {
 
 	public Bush getBush(int x, int y) {
 		return map[y * getWidth() + x].bush;
+	}
+
+	public void gameOver() {
+		gameOver = true;
+	}
+
+	public boolean isGameOver() {
+		return gameOver;
+	}
+	
+	public boolean isWon() {
+		return won;
 	}
 }
