@@ -3,7 +3,6 @@ package ld25;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 

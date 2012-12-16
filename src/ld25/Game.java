@@ -13,7 +13,7 @@ public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
 	// Constants
-	private static final String TITLE = "Goat Sucker";
+	private static final String TITLE = "Revenge Of The Goat Slayer";
 	private static final int WIDTH = 320;
 	private static final int HEIGHT = 240;
 	private static final int SCALE = 2;
@@ -121,11 +121,11 @@ public class Game extends Canvas implements Runnable {
 	
 	@Override
 	public int getWidth() {
-		return WIDTH;
+		return WIDTH * SCALE;
 	}
 	
 	@Override
 	public int getHeight() {
-		return HEIGHT;
+		return HEIGHT * SCALE;
 	}
 }
