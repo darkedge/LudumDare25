@@ -88,7 +88,8 @@ public class Gunner extends GameObject {
 		if(currentImage == right) {
 			for(int x = 1; x < 3; x++) {
 				for(int y = -1; y < 2; y++) {
-					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()) {
+					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()
+							&& world.getBush(mapx + x, mapy + y) == null) {
 						state = State.ALERTED;
 						world.shout(this);
 					}
@@ -97,7 +98,8 @@ public class Gunner extends GameObject {
 		} else {
 			for(int x = -2; x < 0; x++) {
 				for(int y = -1; y < 2; y++) {
-					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()) {
+					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()
+							&& world.getBush(mapx + x, mapy + y) == null) {
 						state = State.ALERTED;
 						world.shout(this);
 					}

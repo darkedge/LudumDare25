@@ -29,8 +29,8 @@ public class World {
 	private Player player;
 	private Camera camera;
 	private BufferedImage blood;
-	private static final int ALERTNESS_TICKS = 50;
-	private int alertness;
+	private static final int ALERTNESS_TICKS = 5 * Game.TICK_RATE;
+	public int alertness = 0;
 	
 	private int pixelWidth;
 	private int pixelHeight;
@@ -141,7 +141,7 @@ public class World {
 		totalBanditCount = banditCount;
 		totalSniperCount = sniperCount;
 		
-		for(int i = 0; i < 200; i++) {
+		for(int i = 0; i < 50; i++) {
 			int j = r.nextInt(WIDTH * HEIGHT);
 			if(map[j].bush == null) {
 				int x = (j % WIDTH) * getTileSize();
@@ -167,6 +167,19 @@ public class World {
 	}
 
 	public void tick() {
+		if(alertness > 0) {
+			checkLights();
+		}
+		if(getBush(player.getMapX(), player.getMapY()) != null) {
+			alertness -= 3;
+		} else {
+			alertness--;
+		}
+		if(alertness < 0) {
+			alertness = 0;
+			relax();
+		}
+		
 		for(GameObject o : gameObjects) {
 			o.tick();
 			if(o.isDisposed()) {
@@ -305,12 +318,15 @@ public class World {
 	
 	public void checkLights() {
 		for(GameObject o : gameObjects) {
-			o.checkFlashlight();
+			if(o != player) {
+				o.checkFlashlight();
+			}
 		}
 	}
 
 	public void shout(GameObject shouter) {
-		int rangeSq = 5 * 5;
+		alertness = ALERTNESS_TICKS;
+		int rangeSq = 4 * 4;
 		for(GameObject o : gameObjects) {
 			int dx = o.getMapX() - shouter.getMapX();
 			int dy = o.getMapY() - shouter.getMapY();
@@ -318,5 +334,19 @@ public class World {
 				o.alert();
 			}
 		}
+	}
+
+	public int getMaxAlertness() {
+		return ALERTNESS_TICKS;
+	}
+
+	public void relax() {
+		for(GameObject o : gameObjects) {
+			o.relax();
+		}
+	}
+
+	public Bush getBush(int x, int y) {
+		return map[y * getWidth() + x].bush;
 	}
 }

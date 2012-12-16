@@ -69,31 +69,45 @@ public class Hud {
 		g.drawRect(rectX, rectY, rectWidth, rectHeight);
 		
 		// enemy counts
-		int x = 265;
-		int y = 109;
-		g.drawString(String.valueOf(world.getSniperCount()), x, y);
-		y += 19;
-		g.drawString(String.valueOf(world.getGunnerCount()), x, y);
-		y += 19;
-		g.drawString(String.valueOf(world.getBanditCount()), x, y);
-		y += 19;
-		g.drawString(String.valueOf(world.getGoatCount()), x, y);
-		y += 19;
+		{
+			int x = 265;
+			int y = 109;
+			g.drawString(String.valueOf(world.getSniperCount()), x, y);
+			y += 19;
+			g.drawString(String.valueOf(world.getGunnerCount()), x, y);
+			y += 19;
+			g.drawString(String.valueOf(world.getBanditCount()), x, y);
+			y += 19;
+			g.drawString(String.valueOf(world.getGoatCount()), x, y);
+			y += 19;
+		}
 		
-		x = 294;
-		y = 109;
-		g.drawString(String.valueOf(world.getTotalSniperCount() - world.getSniperCount()), x, y);
-		y += 19;
-		g.drawString(String.valueOf(world.getTotalGunnerCount() - world.getGunnerCount()), x, y);
-		y += 19;
-		g.drawString(String.valueOf(world.getTotalBanditCount() - world.getBanditCount()), x, y);
-		y += 19;
-		g.drawString(String.valueOf(world.getTotalGoatCount() - world.getGoatCount()), x, y);
-		y += 19;
+		{
+			int x = 294;
+			int y = 109;
+			g.drawString(String.valueOf(world.getTotalSniperCount() - world.getSniperCount()), x, y);
+			y += 19;
+			g.drawString(String.valueOf(world.getTotalGunnerCount() - world.getGunnerCount()), x, y);
+			y += 19;
+			g.drawString(String.valueOf(world.getTotalBanditCount() - world.getBanditCount()), x, y);
+			y += 19;
+			g.drawString(String.valueOf(world.getTotalGoatCount() - world.getGoatCount()), x, y);
+			y += 19;
+		}
 		
 		// player hitpoints
-		g.setColor(new Color(130, 0, 0));
-		int width = (int) ((float) world.getPlayer().getHealth() / world.getPlayer().getMaxHealth() * 66);
-		g.fillRect(247, 195, width, 8);
+		{
+			g.setColor(new Color(50, 105, 19));
+			int width = (int) ((float) world.getPlayer().getHealth() / world.getPlayer().getMaxHealth() * 66);
+			g.fillRect(247, 195, width, 8);
+		}
+		
+		
+		// alertness
+		{
+			g.setColor(new Color(130, 0, 0));
+			int width = (int) ((float) world.alertness / world.getMaxAlertness() * 66);
+			g.fillRect(247, 225, width, 8);
+		}
 	}
 }

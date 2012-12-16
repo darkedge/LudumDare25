@@ -62,15 +62,19 @@ public class Sniper extends GameObject {
 	@Override
 	public void checkFlashlight() {
 		if(currentImage == right) {
-			for(int x = 1; x < 10; x++) {
-				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()) {
+			for(int x = 1; x < 7; x++) {
+				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()
+						&& world.getBush(mapx + x, mapy) == null) {
 					state = State.ALERTED;
+					world.shout(this);
 				}
 			}
 		} else {
 			for(int x = -7; x < 0; x++) {
-				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()) {
+				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()
+						&& world.getBush(mapx + x, mapy) == null) {
 					state = State.ALERTED;
+					world.shout(this);
 				}
 			}
 		}

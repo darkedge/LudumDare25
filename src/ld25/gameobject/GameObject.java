@@ -56,6 +56,7 @@ public abstract class GameObject {
 		health -= damage;
 		if(health < getMaxHealth()) {
 			state = State.ALERTED;
+			world.shout(this);
 			world.getMap()[mapy * world.getWidth() + mapx].blood = true;
 			showHealth = true;
 		}
@@ -203,5 +204,9 @@ public abstract class GameObject {
 
 	public boolean isDisposed() {
 		return isDisposed;
+	}
+
+	public void relax() {
+		state = State.IDLE;
 	}
 }

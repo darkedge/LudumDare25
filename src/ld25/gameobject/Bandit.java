@@ -4,6 +4,7 @@ import ld25.Camera;
 import ld25.Game;
 import ld25.GameImage;
 import ld25.World;
+import ld25.gameobject.GameObject.State;
 
 public class Bandit extends GameObject {
 	private static final int MIN_THINK_TICKS = 20;
@@ -84,8 +85,23 @@ public class Bandit extends GameObject {
 
 	@Override
 	public void checkFlashlight() {
-		// TODO Auto-generated method stub
-		
+		if(currentImage == right) {
+			for(int x = 1; x < 3; x++) {
+				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()
+						&& world.getBush(mapx + x, mapy) == null) {
+					state = State.ALERTED;
+					world.shout(this);
+				}
+			}
+		} else {
+			for(int x = -2; x < 0; x++) {
+				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()
+						&& world.getBush(mapx + x, mapy) == null) {
+					state = State.ALERTED;
+					world.shout(this);
+				}
+			}
+		}
 	}
 
 	
