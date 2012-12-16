@@ -172,4 +172,8 @@ public class Player extends GameObject {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void postMovement() {
+	}
 }

@@ -43,7 +43,7 @@ public class Hud {
 	}
 	
 	public void render(Graphics2D g) {
-		g.drawImage(image, 0, 0, null);
+		g.drawImage(image, 240, 0, null);
 		g.setColor(Color.white);
 		g.drawRect(rectX, rectY, rectWidth, rectHeight);
 	}

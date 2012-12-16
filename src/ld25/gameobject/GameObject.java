@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 import ld25.Camera;
+import ld25.GameImage;
 import ld25.World;
 
 public abstract class GameObject {
@@ -20,19 +21,26 @@ public abstract class GameObject {
 	private boolean isColliding;
 	private boolean showHealth = false;
 	private boolean canMove = true;
+	protected State state;
 	
 	protected BufferedImage currentImage;
 	protected BufferedImage left;
 	protected BufferedImage right;
+	private BufferedImage alerted = GameImage.get("/img/shout.png");
 	
 	public enum Direction {
 		STILL, LEFT, RIGHT, UP, DOWN;
+	}
+	
+	public enum State {
+		IDLE, FLEEING, ALERTED, LOST;
 	}
 	
 	public GameObject(World world, int mapx, int mapy) {
 		this.world = world;
 		this.mapx = mapx;
 		this.mapy = mapy;
+		state = State.IDLE;
 		x = mapx * world.getTileSize();
 		y = mapy * world.getTileSize();
 		health = getMaxHealth();
@@ -139,9 +147,12 @@ public abstract class GameObject {
 				direction = Direction.STILL;
 				x = mapx * world.getTileSize();
 				y = mapy * world.getTileSize();
+				postMovement();
 			}
 		}
 	}
+	
+	public abstract void postMovement();
 
 	public void render(Camera camera, double interpolation) {
 		camera.drawImage(currentImage, x, y);
@@ -150,6 +161,9 @@ public abstract class GameObject {
 			final int width = world.getTileSize();
 			camera.getGraphics().setColor(Color.red);
 			camera.fillRect(Math.round(x) + 1, Math.round(y - 5) + 1, (int) Math.ceil((float) health / getMaxHealth() * width - 2), height - 2); // Red HP bar
+		}
+		if(state == State.ALERTED) {
+			camera.drawImage(alerted, x, y - 11);
 		}
 	}
 	

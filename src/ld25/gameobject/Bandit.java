@@ -82,4 +82,10 @@ public class Bandit extends GameObject {
 		
 	}
 
+	@Override
+	public void postMovement() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

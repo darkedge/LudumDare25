@@ -58,6 +58,23 @@ public class Sniper extends GameObject {
 		                      world.getTileSize(),
 		                      currentImage == right);
 	}
+	
+	@Override
+	public void postMovement() {
+		if(currentImage == right) {
+			for(int x = 1; x < 10; x++) {
+				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()) {
+					state = State.ALERTED;
+				}
+			}
+		} else {
+			for(int x = -7; x < 0; x++) {
+				if(world.getGameObjectAt(mapx + x, mapy) == world.getPlayer()) {
+					state = State.ALERTED;
+				}
+			}
+		}
+	}
 
 	@Override
 	protected void playDeathSound() {

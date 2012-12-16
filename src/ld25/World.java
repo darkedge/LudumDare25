@@ -45,6 +45,10 @@ public class World {
 	
 	private HashSet<GameObject> gameObjects = new HashSet<GameObject>();
 	private HashSet<GameObject> disposed = new HashSet<GameObject>();
+	
+	public Player getPlayer() {
+		return player;
+	}
 
 	public World(Game game) {
 		BufferedImage image = GameImage.get("/img/test.png");

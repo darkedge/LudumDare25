@@ -4,6 +4,7 @@ import ld25.Camera;
 import ld25.Game;
 import ld25.GameImage;
 import ld25.World;
+import ld25.gameobject.GameObject.State;
 
 public class Gunner extends GameObject {
 	private static final int MAX_HEALTH = 30;
@@ -80,5 +81,26 @@ public class Gunner extends GameObject {
 	protected void playAttackSound() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void postMovement() {
+		if(currentImage == right) {
+			for(int x = 1; x < 3; x++) {
+				for(int y = 1; y < 4; y++) {
+					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()) {
+						state = State.ALERTED;
+					}
+				}
+			}
+		} else {
+			for(int x = -2; x < 0; x++) {
+				for(int y = -3; y < 0; y++) {
+					if(world.getGameObjectAt(mapx + x, mapy + y) == world.getPlayer()) {
+						state = State.ALERTED;
+					}
+				}
+			}
+		}
 	}
 }
