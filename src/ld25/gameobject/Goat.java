@@ -9,7 +9,7 @@ import ld25.World;
 import ld25.gameobject.GameObject.Direction;
 
 public class Goat extends GameObject {
-	private static final int MAX_HEALTH = 30;
+	private static final int MAX_HEALTH = 50;
 	private static final int MIN_THINK_TICKS = Game.TICK_RATE;
 	private static final float MOVE_CHANCE = 0.2f;
 	private static final int VAR_THINK_TICKS = 30;

@@ -7,6 +7,7 @@ import ld25.Camera;
 import ld25.Game;
 import ld25.GameImage;
 import ld25.World;
+import ld25.util.Flipper;
 
 public abstract class GameObject {
 	private boolean isDisposed = false;
@@ -39,6 +40,7 @@ public abstract class GameObject {
 	protected BufferedImage right;
 	private BufferedImage alerted = GameImage.get("/img/shout.png");
 	private BufferedImage lost = GameImage.get("/img/lost.png");
+	protected Flipper moveFlipper;
 	
 	public enum Type {
 		GUNNER, BANDIT, SNIPER, GOAT, PLAYER
@@ -108,6 +110,7 @@ public abstract class GameObject {
 		if(shootTicks == 0) {
 			laserTicks = LASER_TICKS;
 			world.getPlayer().hurt(getDamage());
+			playAttackSound();
 			shootTicks = getShootTicks();
 		}
 	}
@@ -145,12 +148,17 @@ public abstract class GameObject {
 		if (success) {
 			movementTicks = 0;
 			world.move(this, direction);
+			moveFlipper = new Flipper(0, world.getTileSize() / 4);
 		}
 		return success;
 	}
 	
 	protected void dispose() {
 		isDisposed = true;
+	}
+	
+	public Direction getDirection() {
+		return direction;
 	}
 	
 	public void tick() {
@@ -226,9 +234,13 @@ public abstract class GameObject {
 						y += world.getTileSize() / MOVEMENT_TICKS;
 						break;
 					case LEFT:
+						moveFlipper.tickPercentage(2.0f / MOVEMENT_TICKS);
+						y = mapy * world.getTileSize() - moveFlipper.getPosition();
 						x -= world.getTileSize() / MOVEMENT_TICKS;
 						break;
 					case RIGHT:
+						moveFlipper.tickPercentage(2.0f / MOVEMENT_TICKS);
+						y = mapy * world.getTileSize() - moveFlipper.getPosition();
 						x += world.getTileSize() / MOVEMENT_TICKS;
 						break;
 					case UP:

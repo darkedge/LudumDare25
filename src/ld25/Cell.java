@@ -7,4 +7,5 @@ public class Cell {
 	public GameObject gameObject;
 	public Bush bush;
 	public boolean blood;
+	public boolean rock;
 }

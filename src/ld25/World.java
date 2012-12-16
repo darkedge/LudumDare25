@@ -28,7 +28,8 @@ public class World {
 	private static final int TILE_SIZE = 16;
 	private Player player;
 	private Camera camera;
-	private BufferedImage blood;
+	private BufferedImage blood = GameImage.get("/img/blood.png");
+	private BufferedImage rock = GameImage.get("/img/rock.png");
 	private static final int ALERTNESS_TICKS = 5 * Game.TICK_RATE;
 	public int alertness = 0;
 	
@@ -94,7 +95,6 @@ public class World {
 	public World(Game game) {
 		BufferedImage image = GameImage.get("/img/test.png");
 		sheet = new SpriteSheet(image, TILE_SIZE);
-		blood = GameImage.get("/img/blood.png");
 
 		for(int i = 0; i < WIDTH * HEIGHT; i++) {
 			map[i] = new Cell();
@@ -104,9 +104,17 @@ public class World {
 		insert(player);
 		
 		int dangerZone = 8;
-		
-		// Random goats
 		Random r = Game.RANDOM;
+		
+		// Rocks
+		for(int i = 0; i < 50; i++) {
+			int j = r.nextInt(WIDTH * HEIGHT);
+			if(!map[j].rock) {
+				map[j].rock = true;
+			}
+		}
+		
+		// Enemies
 		for(int i = 0; i < 50; i++) {
 			int x, y;
 			if(r.nextBoolean()) { // Left or right
@@ -144,6 +152,7 @@ public class World {
 		totalBanditCount = banditCount;
 		totalSniperCount = sniperCount;
 		
+		// Bushes
 		for(int i = 0; i < 50; i++) {
 			int j = r.nextInt(WIDTH * HEIGHT);
 			if(map[j].bush == null) {
@@ -224,7 +233,11 @@ public class World {
 			px = (int) GameMath.clamp(px, 0, WIDTH * TILE_SIZE - camera.getWidth());
 			py = (int) GameMath.clamp(py, 0, HEIGHT * TILE_SIZE
 					- camera.getHeight());
-			camera.setPosition(px, py);
+			if(player.getDirection() == Direction.LEFT || player.getDirection() == Direction.RIGHT) {
+				camera.setPosition(px, camera.getY());
+			} else {
+				camera.setPosition(px, py);
+			}
 		}
 
 		// Tile culling
@@ -254,18 +267,21 @@ public class World {
 			o.render(camera, interpolation);
 		}
 		
-		// Bushes
+		// Bushes/Rocks
 		for (int x = firstX; x <= lastX; x++) {
 			for (int y = firstY; y <= lastY; y++) {
 				if(map[y * WIDTH + x].bush != null) {
 					map[y * WIDTH + x].bush.render(camera, interpolation);
+				}
+				if(map[y * WIDTH + x].rock) {
+					camera.drawImage(rock, x * TILE_SIZE, y * TILE_SIZE);
 				}
 			}
 		}
 	}
 	
 	public boolean isClear(int x, int y) {
-		return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && map[y * WIDTH + x].gameObject == null;
+		return x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && map[y * WIDTH + x].gameObject == null && map[y * WIDTH + x].rock == false;
 	}
 
 	public Camera getCamera() {

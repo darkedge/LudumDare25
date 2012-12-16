@@ -49,7 +49,6 @@ public class Gunner extends GameObject {
 
 	@Override
 	protected void playAttackSound() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -104,11 +103,11 @@ public class Gunner extends GameObject {
 	
 	@Override
 	protected int getShootTicks() {
-		return Game.TICK_RATE / 2;
+		return Game.TICK_RATE / 4;
 	}
 	
 	@Override
 	protected int getDamage() {
-		return 5;
+		return 2;
 	}
 }

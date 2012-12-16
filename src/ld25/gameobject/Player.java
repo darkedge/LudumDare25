@@ -33,7 +33,6 @@ public class Player extends GameObject {
 		return attack;
 	}
 	
-	
 	@Override
 	public void tick() {
 		GameObject other = null;
@@ -73,6 +72,9 @@ public class Player extends GameObject {
 						attack = Attack.DOWN;
 					}
 				}
+			}
+			if(direction != Direction.STILL) {
+				moveFlipper = new Flipper(0, world.getTileSize() / 4);
 			}
 		}
 		
@@ -125,7 +127,7 @@ public class Player extends GameObject {
 				}
 				if(attackTicks == ATTACK_TICKS / 2) {
 					target.hurt(DAMAGE);
-					health += DAMAGE;
+					health += 4;
 					if(health > MAX_HEALTH) {
 						health = MAX_HEALTH;
 					}
