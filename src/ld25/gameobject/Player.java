@@ -1,6 +1,7 @@
 package ld25.gameobject;
 
 import ld25.Camera;
+import ld25.GameImage;
 import ld25.Input;
 import ld25.Input.Button;
 import ld25.World;

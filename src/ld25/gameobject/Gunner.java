@@ -2,13 +2,14 @@ package ld25.gameobject;
 
 import ld25.Camera;
 import ld25.Game;
+import ld25.GameImage;
 import ld25.World;
 
 public class Gunner extends GameObject {
 	private static final int MAX_HEALTH = 30;
-	private static final int MIN_THINK_TICKS = 30;
-	private static final float MOVE_CHANCE = 1.0f;
-	private static final int VAR_THINK_TICKS = 10;
+	private static final int MIN_THINK_TICKS = 50;
+	private static final float MOVE_CHANCE = 0.4f;
+	private static final int VAR_THINK_TICKS = 30;
 	
 	private int ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
 	
@@ -53,8 +54,8 @@ public class Gunner extends GameObject {
 		super.render(camera, interpolation);
 		camera.drawFlashlight((int) x + getWidth() / 2,
 		                      (int) y + getHeight() / 2,
-		                      (int) (3.5f * world.getTileSize()),
-		                      world.getTileSize(),
+		                      (int) (2.5f * world.getTileSize()),
+		                      3 * world.getTileSize(),
 		                      currentImage == right);
 	}
 

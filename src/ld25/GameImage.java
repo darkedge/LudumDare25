@@ -1,4 +1,4 @@
-package ld25.gameobject;
+package ld25;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 
 public class GameImage {
-	private static HashMap<String, BufferedImage> map;
+	private static HashMap<String, BufferedImage> map = new HashMap<String, BufferedImage>();
 	
 	public static BufferedImage get(String name) {
 		if(map.containsKey(name)) {

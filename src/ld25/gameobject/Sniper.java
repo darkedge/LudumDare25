@@ -2,6 +2,7 @@ package ld25.gameobject;
 
 import ld25.Camera;
 import ld25.Game;
+import ld25.GameImage;
 import ld25.World;
 
 public class Sniper extends GameObject {
@@ -53,7 +54,7 @@ public class Sniper extends GameObject {
 		super.render(camera, interpolation);
 		camera.drawFlashlight((int) x + getWidth() / 2,
 		                      (int) y + getHeight() / 2,
-		                      (int) (3.5f * world.getTileSize()),
+		                      (int) (7.5f * world.getTileSize()),
 		                      world.getTileSize(),
 		                      currentImage == right);
 	}
