@@ -119,13 +119,11 @@ public class Game extends Canvas implements Runnable {
 		canvas.start();
 	}
 	
-	@Override
-	public int getWidth() {
-		return WIDTH * SCALE;
+	public int getGameWidth() {
+		return WIDTH;
 	}
 	
-	@Override
-	public int getHeight() {
-		return HEIGHT * SCALE;
+	public int getGameHeight() {
+		return HEIGHT;
 	}
 }

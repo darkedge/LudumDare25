@@ -86,7 +86,7 @@ public class World {
 		}
 		
 		overlay = new Overlay();
-		camera = new Camera(0, 0, game.getHeight(), game.getHeight());
+		camera = new Camera(0, 0, game.getGameHeight(), game.getGameHeight());
 		pixelWidth = WIDTH * TILE_SIZE;
 		pixelHeight = HEIGHT * TILE_SIZE;
 	}
