@@ -1,23 +1,27 @@
-package ld25;
+package ld25.gameobject;
 
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Bandit extends GameObject {
-	private static final int MIN_THINK_TICKS = 20;
+import ld25.Game;
+import ld25.World;
+import ld25.gameobject.GameObject.Direction;
+
+public class Gunner extends GameObject {
+	private static final int MAX_HEALTH = 30;
+	private static final int MIN_THINK_TICKS = 30;
 	private static final float MOVE_CHANCE = 1.0f;
 	private static final int VAR_THINK_TICKS = 10;
 	
 	private int ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
 	
-	private static final int MAX_HEALTH = 30;
-
-	public Bandit(World world, int mapx, int mapy) {
+	public Gunner(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
+
 		try {
-			left = ImageIO.read(Goat.class.getResourceAsStream("/banditleft.png"));
-			right = ImageIO.read(Goat.class.getResourceAsStream("/banditright.png"));
+			left = ImageIO.read(Goat.class.getResourceAsStream("/gunnerleft.png"));
+			right = ImageIO.read(Goat.class.getResourceAsStream("/gunnerright.png"));
 			currentImage = left;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -63,7 +67,7 @@ public class Bandit extends GameObject {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public int getMaxHealth() {
 		return MAX_HEALTH;
@@ -74,5 +78,4 @@ public class Bandit extends GameObject {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

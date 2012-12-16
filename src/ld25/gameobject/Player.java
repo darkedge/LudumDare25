@@ -1,11 +1,15 @@
-package ld25;
+package ld25.gameobject;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import ld25.Camera;
+import ld25.Input;
 import ld25.Input.Button;
+import ld25.util.Flipper;
+import ld25.World;
 
 public class Player extends GameObject {
 	private BufferedImage left;

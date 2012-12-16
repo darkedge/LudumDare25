@@ -1,8 +1,12 @@
-package ld25;
+package ld25.gameobject;
 
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+
+import ld25.Game;
+import ld25.World;
+import ld25.gameobject.GameObject.Direction;
 
 public class Goat extends GameObject {
 	private static final int MAX_HEALTH = 30;

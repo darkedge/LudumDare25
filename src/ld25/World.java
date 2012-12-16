@@ -8,7 +8,14 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import ld25.GameObject.Direction;
+import ld25.gameobject.Bandit;
+import ld25.gameobject.GameObject;
+import ld25.gameobject.Goat;
+import ld25.gameobject.Gunner;
+import ld25.gameobject.Player;
+import ld25.gameobject.Sniper;
+import ld25.gameobject.GameObject.Direction;
+import ld25.util.GameMath;
 
 /**
  * Game model

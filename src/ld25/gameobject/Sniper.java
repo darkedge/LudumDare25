@@ -1,23 +1,27 @@
-package ld25;
+package ld25.gameobject;
 
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Gunner extends GameObject {
+import ld25.Game;
+import ld25.World;
+import ld25.gameobject.GameObject.Direction;
+
+public class Sniper extends GameObject {
 	private static final int MAX_HEALTH = 30;
-	private static final int MIN_THINK_TICKS = 30;
-	private static final float MOVE_CHANCE = 1.0f;
-	private static final int VAR_THINK_TICKS = 10;
+	private static final int MIN_THINK_TICKS = 120;
+	private static final float MOVE_CHANCE = 0.5f;
+	private static final int VAR_THINK_TICKS = 60;
 	
 	private int ticks = MIN_THINK_TICKS + Game.RANDOM.nextInt(VAR_THINK_TICKS);
-	
-	public Gunner(World world, int mapx, int mapy) {
+
+	public Sniper(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
 
 		try {
-			left = ImageIO.read(Goat.class.getResourceAsStream("/gunnerleft.png"));
-			right = ImageIO.read(Goat.class.getResourceAsStream("/gunnerright.png"));
+			left = ImageIO.read(Goat.class.getResourceAsStream("/sniperleft.png"));
+			right = ImageIO.read(Goat.class.getResourceAsStream("/sniperright.png"));
 			currentImage = left;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -63,7 +67,7 @@ public class Gunner extends GameObject {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 	@Override
 	public int getMaxHealth() {
 		return MAX_HEALTH;
@@ -74,4 +78,5 @@ public class Gunner extends GameObject {
 		// TODO Auto-generated method stub
 		
 	}
+
 }
