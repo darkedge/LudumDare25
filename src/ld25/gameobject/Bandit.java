@@ -1,13 +1,8 @@
 package ld25.gameobject;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import ld25.Camera;
 import ld25.Game;
 import ld25.World;
-import ld25.gameobject.GameObject.Direction;
 
 public class Bandit extends GameObject {
 	private static final int MIN_THINK_TICKS = 20;
@@ -20,13 +15,9 @@ public class Bandit extends GameObject {
 
 	public Bandit(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
-		try {
-			left = ImageIO.read(Goat.class.getResourceAsStream("/img/banditleft.png"));
-			right = ImageIO.read(Goat.class.getResourceAsStream("/img/banditright.png"));
-			currentImage = left;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		left = GameImage.get("/img/banditleft.png");
+		right = GameImage.get("/img/banditright.png");
+		currentImage = left;
 	}
 
 	@Override

@@ -10,11 +10,11 @@ import javax.imageio.ImageIO;
 
 import ld25.gameobject.Bandit;
 import ld25.gameobject.GameObject;
+import ld25.gameobject.GameObject.Direction;
 import ld25.gameobject.Goat;
 import ld25.gameobject.Gunner;
 import ld25.gameobject.Player;
 import ld25.gameobject.Sniper;
-import ld25.gameobject.GameObject.Direction;
 import ld25.util.GameMath;
 
 /**
@@ -47,13 +47,9 @@ public class World {
 	private HashSet<GameObject> disposed = new HashSet<GameObject>();
 
 	public World(Game game) {
-		try {
-			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/img/test.png"));
-			sheet = new SpriteSheet(image, TILE_SIZE);
-			blood = ImageIO.read(World.class.getResourceAsStream("/img/blood.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		BufferedImage image = GameImage.get("/img/test.png");
+		sheet = new SpriteSheet(image, TILE_SIZE);
+		blood = GameImage.get("/img/blood.png");
 
 		for(int i = 0; i < WIDTH * HEIGHT; i++) {
 			map[i] = new Cell();

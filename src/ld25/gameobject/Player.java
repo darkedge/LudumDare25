@@ -1,12 +1,5 @@
 package ld25.gameobject;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import ld25.Camera;
 import ld25.Input;
 import ld25.Input.Button;
@@ -31,13 +24,9 @@ public class Player extends GameObject {
 	public Player(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
 		health = MAX_HEALTH;
-		try {
-			left = ImageIO.read(World.class.getResourceAsStream("/img/dogleft.png"));
-			right = ImageIO.read(World.class.getResourceAsStream("/img/dogright.png"));
-			currentImage = right;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		left = GameImage.get("/img/dogleft.png");
+		right = GameImage.get("/img/dogright.png");
+		currentImage = right;
 	}
 	
 	public void tick() {

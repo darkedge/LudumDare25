@@ -1,13 +1,8 @@
 package ld25.gameobject;
 
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import ld25.Camera;
 import ld25.Game;
 import ld25.World;
-import ld25.gameobject.GameObject.Direction;
 
 public class Gunner extends GameObject {
 	private static final int MAX_HEALTH = 30;
@@ -20,13 +15,9 @@ public class Gunner extends GameObject {
 	public Gunner(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
 
-		try {
-			left = ImageIO.read(Goat.class.getResourceAsStream("/img/gunnerleft.png"));
-			right = ImageIO.read(Goat.class.getResourceAsStream("/img/gunnerright.png"));
-			currentImage = left;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		left = GameImage.get("/img/gunnerleft.png");
+		right = GameImage.get("/img/gunnerright.png");
+		currentImage = left;
 	}
 
 	@Override
