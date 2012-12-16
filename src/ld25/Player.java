@@ -15,7 +15,7 @@ public class Player extends GameObject {
 	private static final int DAMAGE = 10;
 	private Attack attack = Attack.NONE;
 	private static final int ATTACK_TICKS = 10;
-	private static final int COOLDOWN_TICKS = 5;
+	private static final int COOLDOWN_TICKS = 15;
 	private GameObject target;
 	private int cooldownTicks;
 	private int attackTicks;
@@ -40,6 +40,8 @@ public class Player extends GameObject {
 	public void tick() {
 		GameObject other = null;
 		if(direction == Direction.STILL && attack == Attack.NONE) {
+			cooldownTicks--;
+			if(cooldownTicks < 0) cooldownTicks = 0;
 			if (Input.getButton(Button.LEFT)) {
 				currentSprite = left;
 				if (!tryMove(Direction.LEFT)) {
@@ -76,12 +78,16 @@ public class Player extends GameObject {
 			}
 		}
 		
-		if(other != null) {
-			playAttackSound();
-			target = other;
-			target.lock();
-			attackFlipper = new Flipper(0, world.getTileSize() / 2);
-			attackTicks = 0;
+		if(cooldownTicks == 0) {
+			if(other != null) {
+				playAttackSound();
+				target = other;
+				target.lock();
+				attackFlipper = new Flipper(0, world.getTileSize() / 2);
+				attackTicks = 0;
+			}
+		} else {
+			attack = Attack.NONE;
 		}
 		
 		doMovement();
@@ -121,6 +127,7 @@ public class Player extends GameObject {
 				}
 				attackTicks++;
 			} else {
+				cooldownTicks = COOLDOWN_TICKS;
 				target.release();
 				target = null;
 				attack = Attack.NONE;

@@ -38,6 +38,7 @@ public abstract class GameObject {
 	public void hurt(int damage) {
 		health -= damage;
 		if(health < getMaxHealth()) {
+			world.getMap()[mapy * world.getWidth() + mapx].blood = true;
 			showHealth = true;
 		}
 		if(health <= 0) {
@@ -56,6 +57,10 @@ public abstract class GameObject {
 	
 	public void release() {
 		canMove = true;
+	}
+	
+	public boolean isBleeding() {
+		return health < getMaxHealth();
 	}
 	
 	protected abstract void playDeathSound();
@@ -124,6 +129,9 @@ public abstract class GameObject {
 				}
 				movementTicks++;
 			} else {
+				if(isBleeding()) {
+					world.getMap()[mapy * world.getWidth() + mapx].blood = true;
+				}
 				direction = Direction.STILL;
 				x = mapx * world.getTileSize();
 				y = mapy * world.getTileSize();

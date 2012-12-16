@@ -25,6 +25,7 @@ public class World {
 	private Player player;
 	private Overlay overlay;
 	private Camera camera;
+	private BufferedImage blood;
 	
 	private int pixelWidth;
 	private int pixelHeight;
@@ -42,6 +43,7 @@ public class World {
 		try {
 			BufferedImage image = ImageIO.read(World.class.getResourceAsStream("/test.png"));
 			sheet = new SpriteSheet(image, TILE_SIZE);
+			blood = ImageIO.read(World.class.getResourceAsStream("/blood.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -89,6 +91,10 @@ public class World {
 		camera = new Camera(0, 0, game.getGameHeight(), game.getGameHeight());
 		pixelWidth = WIDTH * TILE_SIZE;
 		pixelHeight = HEIGHT * TILE_SIZE;
+	}
+	
+	public Cell[] getMap() {
+		return map;
 	}
 
 	private void insert(GameObject object) {
@@ -141,6 +147,9 @@ public class World {
 		for (int x = firstX; x <= lastX; x++) {
 			for (int y = firstY; y <= lastY; y++) {
 				camera.drawImage(sheet.getImage(map[y * WIDTH + x].tile), x * TILE_SIZE, y * TILE_SIZE);
+				if(map[y * WIDTH + x].blood) {
+					camera.drawImage(blood, x * TILE_SIZE, y * TILE_SIZE);
+				}
 			}
 		}
 
