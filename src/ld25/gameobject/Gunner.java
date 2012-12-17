@@ -3,6 +3,7 @@ package ld25.gameobject;
 import ld25.Camera;
 import ld25.Game;
 import ld25.GameImage;
+import ld25.Sound;
 import ld25.World;
 import ld25.gameobject.GameObject.State;
 
@@ -11,6 +12,7 @@ public class Gunner extends GameObject {
 	private static final int MIN_THINK_TICKS = 50;
 	private static final float MOVE_CHANCE = 0.4f;
 	private static final int VAR_THINK_TICKS = 30;
+	private static final Sound ATTACK = Sound.get("/snd/gunnerattack.wav");
 	
 	public Gunner(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
@@ -49,7 +51,7 @@ public class Gunner extends GameObject {
 
 	@Override
 	protected void playAttackSound() {
-		
+		ATTACK.play();
 	}
 
 	@Override

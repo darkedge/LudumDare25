@@ -38,7 +38,7 @@ public class IngameScreen {
 			g.drawImage(gameover, 120 - gameover.getWidth() / 2, 120 - gameover.getHeight() / 2, null);
 		}
 		if(world.isWon()) {
-			g.drawImage(gameover, 120 - gameover.getWidth() / 2, 120 - gameover.getHeight() / 2, null);
+			g.drawImage(won, 120 - gameover.getWidth() / 2, 120 - gameover.getHeight() / 2, null);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package ld25.gameobject;
 import ld25.Camera;
 import ld25.Game;
 import ld25.GameImage;
+import ld25.Sound;
 import ld25.World;
 
 public class Sniper extends GameObject {
@@ -10,6 +11,7 @@ public class Sniper extends GameObject {
 	private static final int MIN_THINK_TICKS = 120;
 	private static final float MOVE_CHANCE = 0.5f;
 	private static final int VAR_THINK_TICKS = 60;
+	private static final Sound ATTACK = Sound.get("/snd/sniperattack.wav");
 
 	public Sniper(World world, int mapx, int mapy) {
 		super(world, mapx, mapy);
@@ -73,8 +75,7 @@ public class Sniper extends GameObject {
 
 	@Override
 	protected void playAttackSound() {
-		// TODO Auto-generated method stub
-		
+		ATTACK.play();
 	}
 	
 	@Override

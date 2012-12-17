@@ -3,6 +3,7 @@ package ld25.gameobject;
 import ld25.Camera;
 import ld25.GameImage;
 import ld25.Input;
+import ld25.Sound;
 import ld25.Input.Button;
 import ld25.World;
 import ld25.util.Flipper;
@@ -13,6 +14,7 @@ public class Player extends GameObject {
 	private Attack attack = Attack.NONE;
 	private static final int ATTACK_TICKS = 15;
 	private static final int COOLDOWN_TICKS = 10;
+	private static final Sound ATTACK = Sound.get("/snd/playerattack.wav");
 	private GameObject target;
 	private int cooldownTicks;
 	private int attackTicks;
@@ -184,8 +186,7 @@ public class Player extends GameObject {
 
 	@Override
 	protected void playAttackSound() {
-		// TODO Auto-generated method stub
-		
+		ATTACK.play();
 	}
 
 	@Override

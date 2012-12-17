@@ -3,13 +3,14 @@ package ld25.gameobject;
 import ld25.Camera;
 import ld25.Game;
 import ld25.GameImage;
+import ld25.Sound;
 import ld25.World;
-import ld25.gameobject.GameObject.State;
 
 public class Bandit extends GameObject {
 	private static final int MIN_THINK_TICKS = 20;
 	private static final float MOVE_CHANCE = 1.0f;
 	private static final int VAR_THINK_TICKS = 10;
+	private static final Sound ATTACK = Sound.get("/snd/banditattack.wav");
 	
 	private static final int MAX_HEALTH = 30;
 
@@ -49,8 +50,7 @@ public class Bandit extends GameObject {
 
 	@Override
 	protected void playAttackSound() {
-		// TODO Auto-generated method stub
-		
+		ATTACK.play();
 	}
 
 	@Override
